@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <UserSecretsId>dotnet-myTube.WS-6107F9D2-9083-46FD-BF78-65481948EF43</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Google.Apis.Core" Version="1.50.0" />
+    <PackageReference Include="Google.Apis.YouTube.v3" Version="1.50.0.2238" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="5.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\myTube.Data\myTube.Data.csproj" />
+    <ProjectReference Include="..\myTube.Domain\myTube.Domain.csproj" />
+  </ItemGroup>
+</Project>

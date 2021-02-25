@@ -1,0 +1,51 @@
+﻿@model myTube.Domain.ViewModels.LoginDto
+
+@*Você não está logado. <a href="#" data-toggle="ajax-modal" data-target="#Login" data-url="@Url.Action("SignIn", "Auth")">Entre</a> ou Cadastre-se para continuar.*@
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Canal</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="SignIn">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Password" class="control-label"></label>
+                <input asp-for="Password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+
+            <div class="buttons form-group">
+                <div class="row">
+                    <div class="col-4">
+                        <input type="submit" value="Entrar" class="btn btn-primary" />
+                    </div>
+
+                    <div class="col-8">
+                        <a class="btn btn-primary" asp-action="Create" asp-controller="Usuario">Quero me cadastrar</a>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col text-center">
+                        <a href="#" data-toggle="ajax-modal" data-target="#EsqueciMinhaSenha" data-url="@Url.Action("EsqueciMinhaSenha", "Usuario")">Esqueci minha senha</a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
