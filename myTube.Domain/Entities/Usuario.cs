@@ -1,8 +1,10 @@
 ﻿using myTube.Domain.Base;
 using myTube.Domain.Enums;
+using myTube.Domain.ValueObjects;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
@@ -18,6 +20,7 @@ namespace myTube.Domain.Entities
 
         [Required]
         [StringLength(100)]
+        [Column("Email")]
         public string Email { get; set; }
 
         [Required]

@@ -61,7 +61,6 @@ namespace myTube.Controllers
                     if (checkCanal == null)
                     {
                         canal.UsuarioId = _usuarioService.Id;
-                        canal.Status = EStatusCanal.Validando;
 
                         await _canalRepository.Add(canal);
                     }

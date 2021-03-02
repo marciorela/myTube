@@ -24,6 +24,14 @@ namespace myTube.Data.Repositories
                 .ToListAsync();
         }
 
+        public async Task<IEnumerable<Canal>> GetByStatus(EStatusCanal status)
+        {
+            return await _ctx.Canais
+                .Where(c => c.Status == status)
+                .Include(u => u.Usuario)
+                .ToListAsync();
+        }
+
         public async Task<IEnumerable<Canal>> GetAll(Guid usuarioId)
         {
             return await _ctx.Canais
@@ -42,6 +50,12 @@ namespace myTube.Data.Repositories
             return await _ctx.Canais
                 .Where(c => c.UsuarioId == usuarioId && c.YoutubeCanalId == youtubeCanalId)
                 .FirstOrDefaultAsync();
+        }
+
+        public async Task Update(Canal canal)
+        {
+            _ctx.Canais.Update(canal);
+            await _ctx.SaveChangesAsync();
         }
     }
 }

@@ -21,9 +21,37 @@ namespace myTube.Domain.Entities
         public string Nome { get; set; }
 
         public DateTime? UltimaBusca { get; set; }
+        
+        [Required]
+        [DataType(DataType.Date)]
+        public DateTime PrimeiraBusca  { get; set; }
+
+
+        // READ-ONLY - INFORMAÇÕES CONSULTADAS NA API
+        [StringLength(50)]
+        public string ETag { get; set; }
+
+        [StringLength(200)]
+        public string CustomUrl { get; set; }
+
+        [StringLength(200)]
+        public string Title { get; set; }
+
+        public string Description { get; set; }
+
+        [StringLength(150)]
+        public string ThumbnailMinUrl { get; set; }
+
+        [StringLength(150)]
+        public string ThumbnailMediumUrl { get; set; }
+
+        [StringLength(150)]
+        public string ThumbnailMaxUrl { get; set; }
+
+        public DateTime? PublishedAt { get; set; }
 
         [Required]
-        public EStatusCanal Status { get; set; } = EStatusCanal.Ativo;
+        public EStatusCanal Status { get; set; } = EStatusCanal.Validar;
 
 
         // FK

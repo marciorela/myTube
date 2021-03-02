@@ -51,6 +51,7 @@ namespace myTube
             var config = new AutoMapper.MapperConfiguration(cfg =>
             {
                 cfg.AddProfile<CanalProfile>();
+                cfg.AddProfile<UsuarioProfile>();
             });
             IMapper mapper = config.CreateMapper();
             services.AddSingleton(mapper);

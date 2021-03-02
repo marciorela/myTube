@@ -5,6 +5,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using myTube.Data.Repositories;
 using myTube.Domain.Entities;
+using myTube.Services.Youtube;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -20,18 +21,21 @@ namespace myTube.WS
         private readonly UsuarioRepository _usuarioRepository;
         private readonly CanalRepository _canalRepository;
         private readonly FilmeRepository _filmeRepository;
+        private readonly YoutubeServices _youTubeServices;
 
         public WSCheckNewVideos(
             ILogger<WSCheckNewVideos> logger, 
             UsuarioRepository usuarioRepository,
             CanalRepository canalRepository,
-            FilmeRepository filmeRepository
+            FilmeRepository filmeRepository,
+            YoutubeServices youTubeServices
             )
         {
             _logger = logger;
             _usuarioRepository = usuarioRepository;
             _canalRepository = canalRepository;
             _filmeRepository = filmeRepository;
+            _youTubeServices = youTubeServices;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -64,27 +68,39 @@ namespace myTube.WS
 
         public async Task GetMoviesByUsuario(Usuario usuario)
         {
+
             var canais = await _canalRepository.GetAtivos(usuario.Id);
             foreach (var canal in canais)
             {
-                var filmes = await GetMoviesByCanal(canal);
+
+                // SEMPRE BUSCAR A PARTIR DAS 0:00 DO DIA ANTERIOR À ÚLTIMA BUSCA
+                var publishedAfter = canal.PrimeiraBusca;
+                if (canal.UltimaBusca != null)
+                { 
+                    publishedAfter = ((DateTime)canal.UltimaBusca).Date.AddDays(-1);
+                }
+
+                var filmes = await _youTubeServices.GetVideosByChannelId(usuario.ApiKey, canal.YoutubeCanalId, publishedAfter);
                 foreach (var filme in filmes)
                 {
 
-                    var filmeDB = await _filmeRepository.GetByYoutubeId(filme.Id.VideoId, usuario.Id);
+                    var filmeDB = await _filmeRepository.GetByYoutubeId(filme.Id, usuario.Id);
                     if (filmeDB == null)
                     {
-                        await _filmeRepository.Add(new Filme
+                        await _filmeRepository.Add(new Filme()
                         {
-                            YoutubeFilmeId = filme.Id.VideoId,
                             CanalId = canal.Id,
-                            PublishedAt = filme.Snippet.PublishedAt,
-                            Description = filme.Snippet.Description,
-                            ThumbnailMaxUrl = filme.Snippet.Thumbnails.High?.Url,
-                            ThumbnailMediumUrl = filme.Snippet.Thumbnails.Medium?.Url,
-                            ThumbnailMinUrl = filme.Snippet.Thumbnails.Default__?.Url,
-                            Title = filme.Snippet.Title,
-                            ETag = filme.Snippet.ETag ?? ""
+
+                            YoutubeFilmeId = filme.Id,
+                            DurationSecs = filme.DurationSecs,
+                            PublishedAt = filme.PublishedAt,
+                            Summary = filme.Summary,
+                            Description = filme.Description,
+                            ThumbnailMaxUrl = filme.ThumbnailMaxUrl,
+                            ThumbnailMediumUrl = filme.ThumbnailMediumUrl,
+                            ThumbnailMinUrl = filme.ThumbnailMinUrl,
+                            Title = filme.Title,
+                            ETag = filme.ETag ?? ""                            
                         });
                     }
 
@@ -92,50 +108,5 @@ namespace myTube.WS
             }
         }
 
-        public async Task<List<SearchResult>> GetMoviesByCanal(Canal canal)
-        {
-
-            return await Task.Run(() =>
-            {
-                List<SearchResult> res = new List<SearchResult>();
-
-                var _youtubeService = new YouTubeService(new BaseClientService.Initializer()
-                {
-                    ApiKey = canal.Usuario.ApiKey,
-                    ApplicationName = "Videopedia"//this.GetType().ToString()
-                });
-
-                string nextpagetoken = " ";
-
-                while (nextpagetoken != null)
-                {
-                    var searchListRequest = _youtubeService.Search.List("snippet");
-                    //searchListRequest.MaxResults = 50;
-                    searchListRequest.ChannelId = canal.YoutubeCanalId;
-                    searchListRequest.PageToken = nextpagetoken;
-
-                    // SEMPRE BUSCAR A PARTIR DAS 0:00 DO DIA ANTERIOR À ÚLTIMA BUSCA
-                    if (canal.UltimaBusca == null)
-                    {
-                        searchListRequest.PublishedAfter = DateTime.Today.AddDays(-1);
-                    }
-                    else
-                    {
-                        searchListRequest.PublishedAfter = ((DateTime)canal.UltimaBusca).Date.AddDays(-1);
-                    }
-
-                    // Call the search.list method to retrieve results matching the specified query term.
-                    var searchListResponse = searchListRequest.Execute();
-
-                    // Process  the video responses 
-                    res.AddRange(searchListResponse.Items);
-
-                    nextpagetoken = searchListResponse.NextPageToken;
-                }
-
-                return res;
-
-            });
-        }
     }
 }

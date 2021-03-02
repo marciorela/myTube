@@ -27,5 +27,12 @@ namespace myTube.Data
             base.OnConfiguring(optionsBuilder);
             optionsBuilder.UseSqlServer(_config.GetConnectionString("SQLServer"), b => b.MigrationsAssembly("myTube.Data"));
         }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            //modelBuilder.Entity<Usuario>().OwnsOne(e => e.Email);
+        }
     }
 }

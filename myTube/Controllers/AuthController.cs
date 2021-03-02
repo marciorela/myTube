@@ -52,7 +52,15 @@ namespace myTube.Controllers
             await _usuarioService.SignIn(usuario);
 
             return Redirect(returnUrl ?? "/");
-
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Logout()
+        {
+            await _usuarioService.SignOut();
+
+            return Redirect("/");
+        }
+
     }
 }

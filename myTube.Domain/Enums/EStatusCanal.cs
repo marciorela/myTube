@@ -11,8 +11,9 @@ namespace myTube.Domain.Enums
     {
         Ativo = 0,
         Inativo = 1,
+        Validar = 2,
 
-        [Description("Validando")]
-        Validando = 2
+        [Description("Canal não existe")]
+        CanalNaoExiste = 3
     }
 }

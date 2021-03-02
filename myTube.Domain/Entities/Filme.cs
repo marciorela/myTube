@@ -21,17 +21,21 @@ namespace myTube.Domain.Entities
         [StringLength(200)]
         public string Title { get; set; }
         
+        public string Summary { get; set; }
+
         public string Description { get; set; }
+        
+        public double DurationSecs { get; set; }
         
         public DateTime? PublishedAt { get; set; }
         
-        [StringLength(100)]
+        [StringLength(150)]
         public string ThumbnailMinUrl { get; set; }
 
-        [StringLength(100)]
+        [StringLength(150)]
         public string ThumbnailMediumUrl { get; set; }
 
-        [StringLength(100)]
+        [StringLength(150)]
         public string ThumbnailMaxUrl { get; set; }
 
         public DateTime? AssistidoEm { get; set; }

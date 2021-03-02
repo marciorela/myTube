@@ -11,7 +11,7 @@ namespace myTube.Domain.Base
         public Entity()
         {
             Id = Guid.NewGuid();
-            Data =  DateTime.UtcNow;
+            Data = DateTime.Now;
         }
 
         public Guid Id { get; set; }
