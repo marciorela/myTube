@@ -112,6 +112,7 @@ namespace myTube.Services.Youtube
                     {
                         videoInList.Description = video.Snippet.Description;
                         videoInList.DurationSecs = YoutubeTimeToSecs(video.ContentDetails.Duration);
+                        videoInList.ScheduledStartTime = video.LiveStreamingDetails.ScheduledStartTime;
                     }
                 }
             }
@@ -158,7 +159,7 @@ namespace myTube.Services.Youtube
 
                 while (nextpagetoken != null)
                 {
-                    var searchListRequest = _youtubeService.Videos.List("snippet,contentDetails");
+                    var searchListRequest = _youtubeService.Videos.List("snippet,contentDetails,LiveStreamingDetails");
                     searchListRequest.Id = idVideos;
                     searchListRequest.MaxResults = 1;
                     //searchListRequest.MySubscribers = true;
@@ -197,7 +198,7 @@ namespace myTube.Services.Youtube
                 while (nextpagetoken != null)
                 {
                     var searchListRequest = _youtubeService.Search.List("snippet");
-                    //searchListRequest.MaxResults = 50;
+                    searchListRequest.MaxResults = 50;
                     searchListRequest.ChannelId = channelId;
                     searchListRequest.PageToken = nextpagetoken;
                     searchListRequest.PublishedAfter = publishedAfter;

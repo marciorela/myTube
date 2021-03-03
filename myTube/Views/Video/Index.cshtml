@@ -1,4 +1,4 @@
-﻿@model IEnumerable<myTube.Domain.Entities.Canal>
+﻿@model IEnumerable<myTube.Domain.Entities.Filme>
 
 @{
     ViewData["Title"] = "Index";
@@ -16,13 +16,19 @@
                 
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Nome)
+                @Html.DisplayNameFor(model => model.Title)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.UltimaBusca)
+                @Html.DisplayNameFor(model => model.DurationSecs)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PublishedAt)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Canal)
             </th>
             <th></th>
         </tr>
@@ -31,25 +37,24 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                <img src="@Html.DisplayFor(modelItem => item.ThumbnailMinUrl)" />
+                <a href="https://www.youtube.com/watch?v=@item.YoutubeFilmeId">
+                    <img src="@Html.DisplayFor(modelItem => item.ThumbnailMinUrl)" />
+                </a>
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Nome)
+                @Html.DisplayFor(modelItem => item.Title)
             </td>
             <td>
-                @{
-                    if (item.UltimaBusca == null)
-                    {
-                        <label>Nunca</label>
-                    }
-                    else
-                    {
-                        @Html.DisplayFor(modelItem => item.UltimaBusca)
-                    }
-                }
+                @Html.DisplayFor(modelItem => item.DurationSecs)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PublishedAt)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Canal.Title)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

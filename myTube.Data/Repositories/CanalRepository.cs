@@ -57,5 +57,16 @@ namespace myTube.Data.Repositories
             _ctx.Canais.Update(canal);
             await _ctx.SaveChangesAsync();
         }
+
+        public async Task UpdateUltimaBusca(Canal canal, DateTime ultimaBusca, DateTime? ultimoVideo)
+        {
+            canal.UltimaBusca = ultimaBusca;
+            canal.UltimoVideo = ultimoVideo;
+
+            //_ctx.Canais.Attach(canal);
+            _ctx.Entry(canal).Property(x => x.UltimaBusca).IsModified = true;
+            _ctx.Entry(canal).Property(x => x.UltimoVideo).IsModified = true;
+            await _ctx.SaveChangesAsync();
+        }
     }
 }

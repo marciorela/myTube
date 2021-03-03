@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using myTube.Data.Base;
 using myTube.Domain.Entities;
+using myTube.Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +10,9 @@ using System.Threading.Tasks;
 
 namespace myTube.Data.Repositories
 {
-    public class FilmeRepository : BaseRepository
+    public class VideoRepository : BaseRepository
     {
-        public FilmeRepository(AppDbContext ctx) : base(ctx)
+        public VideoRepository(AppDbContext ctx) : base(ctx)
         {
         }
 
@@ -27,6 +28,15 @@ namespace myTube.Data.Repositories
         {
             await _ctx.Filmes.AddAsync(filme);
             await _ctx.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<Filme>> GetByStatus(Guid usuarioId, EStatusVideo status)
+        {
+            return await _ctx.Filmes
+                .Include(i => i.Canal)
+                .Where(v => v.Canal.UsuarioId == usuarioId && v.Status == status)
+                .OrderBy(v => v.PublishedAt)
+                .ToListAsync();
         }
     }
 }

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using myTube.Data;
 
 namespace myTube.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210302143119_inicial1")]
+    partial class inicial1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -96,13 +98,16 @@ namespace myTube.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<bool>("Assistido")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("AssistidoEm")
+                        .HasColumnType("datetime2");
+
                     b.Property<Guid>("CanalId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("Data")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DataStatus")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
@@ -118,9 +123,6 @@ namespace myTube.Data.Migrations
 
                     b.Property<DateTime?>("PublishedAt")
                         .HasColumnType("datetime2");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
 
                     b.Property<string>("Summary")
                         .HasColumnType("nvarchar(max)");

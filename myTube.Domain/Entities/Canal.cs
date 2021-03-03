@@ -20,7 +20,11 @@ namespace myTube.Domain.Entities
         [StringLength(50)]
         public string Nome { get; set; }
 
+        [Display(Name = "Última Busca")]
         public DateTime? UltimaBusca { get; set; }
+        
+        [Display(Name = "Último Vídeo")]
+        public DateTime? UltimoVideo { get; set; }
         
         [Required]
         [DataType(DataType.Date)]

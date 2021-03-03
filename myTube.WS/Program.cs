@@ -1,6 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using myTube.Data;
+using myTube.Data.Repositories;
 using myTube.Services.Youtube;
 using System;
 using System.Collections.Generic;
@@ -21,9 +22,14 @@ namespace myTube.WS
                 .UseWindowsService()
                 .ConfigureServices((hostContext, services) =>
                 {
-                    ServiceData.AddDbContext(services);
-                    services.AddSingleton<YoutubeServices>();
-                    //services.AddHostedService<WSCheckNewVideos>();
+                    services.AddTransient<AppDbContext>();
+
+                    services.AddScoped<UsuarioRepository>();
+                    services.AddScoped<CanalRepository>();
+                    services.AddScoped<VideoRepository>();
+
+                    services.AddScoped<YoutubeServices>();
+                    services.AddHostedService<WSCheckNewVideos>();
                     services.AddHostedService<WSValidateChannel>();
                 });
     }

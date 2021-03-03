@@ -1,4 +1,5 @@
 ﻿using myTube.Domain.Base;
+using myTube.Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -28,7 +29,9 @@ namespace myTube.Domain.Entities
         public double DurationSecs { get; set; }
         
         public DateTime? PublishedAt { get; set; }
-        
+
+        public DateTime? ScheduledStartTime { get; set; }
+
         [StringLength(150)]
         public string ThumbnailMinUrl { get; set; }
 
@@ -38,10 +41,10 @@ namespace myTube.Domain.Entities
         [StringLength(150)]
         public string ThumbnailMaxUrl { get; set; }
 
-        public DateTime? AssistidoEm { get; set; }
+        public DateTime DataStatus { get; set; }
 
         [Required]
-        public bool Assistido { get; set; } = false;
+        public EStatusVideo Status { get; set; } = EStatusVideo.NaoAssistido;
 
         
         // FK

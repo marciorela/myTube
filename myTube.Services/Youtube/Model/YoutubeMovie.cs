@@ -11,6 +11,7 @@ namespace myTube.Services.Youtube.Model
         public string Id { get; set; }
         public string ChannelId { get; set; }
         public DateTime? PublishedAt { get; set; }
+        public DateTime? ScheduledStartTime { get; set; }
         public string Summary { get; set; }
         public string Description { get; set; }
         public string Title { get; set; }

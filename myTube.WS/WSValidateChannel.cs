@@ -43,7 +43,7 @@ namespace myTube.WS
                     _logger.LogError(e, e.Message);
                 }
 
-                await Task.Delay(1000, stoppingToken);
+                await Task.Delay(60000, stoppingToken);
             }
         }
 

@@ -16,7 +16,7 @@ namespace myTube.Data
 
             services.AddSingleton<UsuarioRepository>();
             services.AddSingleton<CanalRepository>();
-            services.AddSingleton<FilmeRepository>();
+            services.AddSingleton<VideoRepository>();
         }
     }
 }
