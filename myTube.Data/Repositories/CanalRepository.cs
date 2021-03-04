@@ -21,6 +21,7 @@ namespace myTube.Data.Repositories
             return await _ctx.Canais
                 .Where(c => c.Status == EStatusCanal.Ativo && c.UsuarioId == usuarioId)
                 .Include(u => u.Usuario)
+                .OrderBy(c => c.UltimaBusca)
                 .ToListAsync();
         }
 
@@ -70,9 +71,9 @@ namespace myTube.Data.Repositories
             await _ctx.SaveChangesAsync();
         }
 
-        public async Task SetError(Canal canal, Exception e)
+        public async Task SetSituacao(Canal canal, EStatusCanal status, Exception e = null)
         {
-            canal.Status = EStatusCanal.Erro;
+            canal.Status = status;
 
             _ctx.Entry(canal).Property(x => x.Status).IsModified = true;
             await _ctx.SaveChangesAsync();

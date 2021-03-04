@@ -22,6 +22,9 @@
                 @Html.DisplayNameFor(model => model.UltimaBusca)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.UltimoVideo)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Status)
             </th>
             <th></th>
@@ -54,6 +57,18 @@
                     else
                     {
                         @Html.DisplayFor(modelItem => item.UltimaBusca)
+                    }
+                }
+            </td>
+            <td>
+                @{
+                    if (item.UltimoVideo == null)
+                    {
+                        <label>Nenhum</label>
+                    }
+                    else
+                    {
+                        @Html.DisplayFor(modelItem => item.UltimoVideo)
                     }
                 }
             </td>

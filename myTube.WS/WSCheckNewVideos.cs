@@ -74,7 +74,7 @@ namespace myTube.WS
             {
 
                 var ultimaBusca = canal.UltimaBusca ?? DateTime.MinValue;
-                if ((DateTime.Now - ultimaBusca).TotalHours > 3)
+                if ((DateTime.Now - ultimaBusca).TotalHours >= 8)
                 {
 
                     // SEMPRE BUSCAR A PARTIR DAS 0:00 DO DIA ANTERIOR AO ÚLTIMO VÍDEO

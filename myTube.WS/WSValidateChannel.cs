@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using myTube.Data.Repositories;
+using myTube.Domain.Entities;
 using myTube.Domain.Enums;
 using myTube.Services.Youtube;
 using System;
@@ -49,7 +50,23 @@ namespace myTube.WS
 
         private async Task ValidarCanaisPendentes()
         {
-            var canais = await _canalRepository.GetByStatus(EStatusCanal.Validar);
+            try
+            {
+                var canaisValidar = await _canalRepository.GetByStatus(EStatusCanal.Validar);
+                await ValidarCanais(canaisValidar);
+
+                var canaisQuota = await _canalRepository.GetByStatus(EStatusCanal.QuotaExceeded);
+                await ValidarCanais(canaisQuota);
+            }
+            catch
+            {
+                // POR ENQUANTO, NADA A FAZER
+                throw;
+            }
+        }
+
+        private async Task ValidarCanais(IEnumerable<Canal> canais)
+        {
             foreach (var canal in canais)
             {
                 try
@@ -66,15 +83,28 @@ namespace myTube.WS
                         canal.ThumbnailMaxUrl = info.ThumbnailMaxUrl;
                         canal.Title = info.Title;
                         canal.Status = EStatusCanal.Ativo;
-
-                        await _canalRepository.Update(canal);
                     }
+                    else
+                    {
+                        canal.Status = EStatusCanal.CanalNaoExiste;
+                    }
+
+                    await _canalRepository.Update(canal);
                 }
                 catch (Exception e)
                 {
-                    await _canalRepository.SetError(canal, e);
+                    if (e.Message.Contains("Reason[quotaExceeded]"))
+                    {
+                        await _canalRepository.SetSituacao(canal, EStatusCanal.QuotaExceeded);
+                    }
+                    else
+                    {
+                        await _canalRepository.SetSituacao(canal, EStatusCanal.Erro, e);
+                        throw;
+                    }
                 }
             }
         }
     }
 }
+

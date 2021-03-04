@@ -15,6 +15,9 @@ namespace myTube.Domain.Enums
 
         [Description("Canal não existe")]
         CanalNaoExiste = 3,
-        Erro = 4
+        Erro = 4,
+
+        [Description("Cota excedida")]
+        QuotaExceeded
     }
 }

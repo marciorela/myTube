@@ -1,0 +1,69 @@
+﻿.icon {
+  font-size: 2em;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.icon-normal {
+  color: tomato;
+}
+
+.icon-selected {
+  color: green;
+}
+
+.icon-unselected {
+  color: gray;
+}
+
+.icon-green {
+    color: #017837;
+}
+
+.icon-blue {
+    color: #01398A;
+}
+
+.icon-yellow {
+    color: #746301;
+}
+
+.icon-red {
+    color: #740101;
+}
+
+.bg {
+    background-color: red;
+}
+
+.border {
+    border-color: #131314 !important;
+    border-style: solid;
+    border-width: 1px;
+    /*margin: 2px;*/
+    /*padding: 4px;*/
+}
+
+.rodape {
+    color: #4D4D4D;
+    font-size: 0.8rem;
+}
+
+.rodape label {
+    margin-bottom: 0;
+}
+
+.rodape .duration {
+    background-color: #B9B9B9;
+    color: black;
+    padding: 0px 2px;
+    margin-bottom: 10px;
+}
+
+.rodape .published {
+    margin-left: 20%;
+}
+
+.title {
+    font-weight: 500;
+}

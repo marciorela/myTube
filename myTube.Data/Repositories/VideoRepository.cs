@@ -35,7 +35,7 @@ namespace myTube.Data.Repositories
             return await _ctx.Filmes
                 .Include(i => i.Canal)
                 .Where(v => v.Canal.UsuarioId == usuarioId && v.Status == status)
-                .OrderBy(v => v.PublishedAt)
+                .OrderBy(v => v.ScheduledStartTime ?? v.PublishedAt)
                 .ToListAsync();
         }
 
@@ -52,7 +52,6 @@ namespace myTube.Data.Repositories
             _ctx.Entry(video).Property(p => p.Status).IsModified = true;
             _ctx.Entry(video).Property(p => p.DataStatus).IsModified = true;
 
-//            _ctx. Update()
             await _ctx.SaveChangesAsync();
         }
     }

@@ -24,11 +24,12 @@ namespace myTube.WS
                 {
                     services.AddTransient<AppDbContext>();
 
-                    services.AddScoped<UsuarioRepository>();
-                    services.AddScoped<CanalRepository>();
-                    services.AddScoped<VideoRepository>();
+                    services.AddSingleton<UsuarioRepository>();
+                    services.AddSingleton<CanalRepository>();
+                    services.AddSingleton<VideoRepository>();
 
-                    services.AddScoped<YoutubeServices>();
+                    services.AddSingleton<YoutubeServices>();
+
                     services.AddHostedService<WSCheckNewVideos>();
                     services.AddHostedService<WSValidateChannel>();
                 });
