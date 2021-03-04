@@ -16,7 +16,7 @@
                 
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Nome)
+                @Html.DisplayNameFor(model => model.Title)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.UltimaBusca)
@@ -34,7 +34,16 @@
                 <img src="@Html.DisplayFor(modelItem => item.ThumbnailMinUrl)" />
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Nome)
+                @{
+                    if (item.Title == null)
+                    {
+                        <label>-------------------------</label>
+                    }
+                    else 
+                    { 
+                        @Html.DisplayFor(modelItem => item.Title)
+                    }
+                }
             </td>
             <td>
                 @{

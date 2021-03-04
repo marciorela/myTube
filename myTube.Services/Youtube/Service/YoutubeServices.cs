@@ -48,7 +48,11 @@ namespace myTube.Services.Youtube
                     listIds.Clear();
                 }
             }
-            await GetExtraVideosInformation(apiKey, string.Join(",", listIds), result);
+
+            if (listIds.Count > 0)
+            {
+                await GetExtraVideosInformation(apiKey, string.Join(",", listIds), result);
+            }
 
             return result;
         }
@@ -77,7 +81,7 @@ namespace myTube.Services.Youtube
                 // Process  the video responses 
                 //res.AddRange(searchListResponse.Items);
 
-                if (searchListResponse.Items.Count > 0)
+                if (searchListResponse.Items != null && searchListResponse.Items.Count > 0)
                 {
                     return new YoutubeChannel()
                     {
@@ -112,7 +116,11 @@ namespace myTube.Services.Youtube
                     {
                         videoInList.Description = video.Snippet.Description;
                         videoInList.DurationSecs = YoutubeTimeToSecs(video.ContentDetails.Duration);
-                        videoInList.ScheduledStartTime = video.LiveStreamingDetails.ScheduledStartTime;
+
+                        if (video.LiveStreamingDetails != null)
+                        {
+                            videoInList.ScheduledStartTime = video.LiveStreamingDetails.ScheduledStartTime;
+                        }
                     }
                 }
             }

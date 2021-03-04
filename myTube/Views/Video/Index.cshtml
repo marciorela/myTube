@@ -6,14 +6,11 @@
 
 <h1>Index</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                
+
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Title)
@@ -34,10 +31,10 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
+        @foreach (var item in Model) {
+        <tr id="item-@item.Id">
             <td>
-                <a href="https://www.youtube.com/watch?v=@item.YoutubeFilmeId">
+                <a href="https://www.youtube.com/watch?v=@item.YoutubeFilmeId" target="_blank">
                     <img src="@Html.DisplayFor(modelItem => item.ThumbnailMinUrl)" />
                 </a>
             </td>
@@ -57,11 +54,81 @@
                 @Html.DisplayFor(modelItem => item.Canal.Title)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <i class="icon icon-unselected far fa-minus-square" onclick="setIgnorado('@item.Id')"></i>
+                <i class="icon icon-unselected far fa-check-square" onclick="setAssistido('@item.Id')"></i>
+                <i class="icon icon-unselected far fa-star" onclick="setFavorito('@item.Id')"></i>
+                <i class="icon icon-unselected far fa-clock" onclick="setAssistirDepois('@item.Id')"></i>
+
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a>
             </td>
         </tr>
 }
     </tbody>
 </table>
+
+<script>
+    function setAssistido(id) {
+        let params = {
+            url: `@Url.Action("Assistido", "Video")/${id}`,
+            method: 'get',
+            success: () => {
+                toastr.success('Video marcado como Assistido', 'myTube');
+                $(`#item-${id}`).fadeOut('slow', () => $(this).remove());
+                $(`#item-${id}`).remove();
+            },
+            error: (resp) => { toastr.error(resp.statusText, 'myTube'); },
+            complete: () => { }
+        };
+
+        $.ajax(params)
+    }
+
+    function setIgnorado(id) {
+        let params = {
+            url: `@Url.Action("Ignorado", "Video")/${id}`,
+            method: 'get',
+            success: () => {
+                toastr.warning('Video marcado como Ignorado', 'myTube');
+                $(`#item-${id}`).fadeOut('slow', () => $(this).remove());
+                $(`#item-${id}`).remove();
+            },
+            error: (resp) => { toastr.error(resp.statusText, 'myTube'); },
+            complete: () => { }
+        };
+
+        $.ajax(params)
+    }
+
+    function setFavorito(id) {
+        let params = {
+            url: `@Url.Action("Favorito", "Video")/${id}`,
+            method: 'get',
+            success: () => {
+                toastr.warning('Video marcado como Favorito', 'myTube');
+                $(`#item-${id}`).fadeOut('slow', () => $(this).remove());
+                $(`#item-${id}`).remove();
+            },
+            error: (resp) => { toastr.error(resp.statusText, 'myTube'); },
+            complete: () => { }
+        };
+
+        $.ajax(params)
+    }
+
+    function setAssistirDepois(id) {
+        let params = {
+            url: `@Url.Action("AssistirDepois", "Video")/${id}`,
+            method: 'get',
+            success: () => {
+                toastr.info('Video marcado como Assistir Depois', 'myTube');
+                $(`#item-${id}`).fadeOut('slow', () => $(this).remove());
+                $(`#item-${id}`).remove();
+            },
+            error: (resp) => { toastr.error(resp.statusText, 'myTube'); },
+            complete: () => { }
+        };
+
+        $.ajax(params)
+    }
+
+</script>

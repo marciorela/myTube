@@ -38,5 +38,22 @@ namespace myTube.Data.Repositories
                 .OrderBy(v => v.PublishedAt)
                 .ToListAsync();
         }
+
+        public async Task ChangeStatus(Guid id, EStatusVideo status)
+        {
+            var video = new Filme()
+            {
+                Id = id,
+                Status = status,
+                DataStatus = DateTime.Now
+            };
+
+            _ctx.Filmes.Attach(video);
+            _ctx.Entry(video).Property(p => p.Status).IsModified = true;
+            _ctx.Entry(video).Property(p => p.DataStatus).IsModified = true;
+
+//            _ctx. Update()
+            await _ctx.SaveChangesAsync();
+        }
     }
 }

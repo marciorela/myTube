@@ -36,6 +36,7 @@ namespace myTube.Data.Repositories
         {
             return await _ctx.Canais
                 .Where(c => c.UsuarioId == usuarioId)
+                .OrderBy(c => c.Title)
                 .ToListAsync();
         }
 
@@ -66,6 +67,14 @@ namespace myTube.Data.Repositories
             //_ctx.Canais.Attach(canal);
             _ctx.Entry(canal).Property(x => x.UltimaBusca).IsModified = true;
             _ctx.Entry(canal).Property(x => x.UltimoVideo).IsModified = true;
+            await _ctx.SaveChangesAsync();
+        }
+
+        public async Task SetError(Canal canal, Exception e)
+        {
+            canal.Status = EStatusCanal.Erro;
+
+            _ctx.Entry(canal).Property(x => x.Status).IsModified = true;
             await _ctx.SaveChangesAsync();
         }
     }

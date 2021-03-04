@@ -14,6 +14,10 @@ namespace myTube.Domain.Enums
 
         Assistido,
 
-        Ignorado        
+        Ignorado,
+
+        Favorito,
+
+        AssistirDepois
     }
 }

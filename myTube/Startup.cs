@@ -82,7 +82,7 @@ namespace myTube
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Video}/{action=Index}/{id?}");
             });
         }
     }

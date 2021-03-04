@@ -50,7 +50,7 @@ namespace myTube.WS
                 }
                 catch (Exception e)
                 {
-                    _logger.LogError(e, "err");
+                    _logger.LogError(e, e.Message);
                 }
 
                 await Task.Delay(120000, stoppingToken);
@@ -74,7 +74,7 @@ namespace myTube.WS
             {
 
                 var ultimaBusca = canal.UltimaBusca ?? DateTime.MinValue;
-                if ((DateTime.Now - ultimaBusca).TotalHours > 5)
+                if ((DateTime.Now - ultimaBusca).TotalHours > 3)
                 {
 
                     // SEMPRE BUSCAR A PARTIR DAS 0:00 DO DIA ANTERIOR AO ÚLTIMO VÍDEO
@@ -99,6 +99,7 @@ namespace myTube.WS
                                 YoutubeFilmeId = filme.Id,
                                 DurationSecs = filme.DurationSecs,
                                 PublishedAt = filme.PublishedAt,
+                                ScheduledStartTime = filme.ScheduledStartTime,
                                 Summary = filme.Summary,
                                 Description = filme.Description,
                                 ThumbnailMaxUrl = filme.ThumbnailMaxUrl,

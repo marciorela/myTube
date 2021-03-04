@@ -16,9 +16,8 @@ namespace myTube.Domain.Entities
         [StringLength(50)]
         public string YoutubeCanalId { get; set; }
 
-        [Required]
         [StringLength(50)]
-        public string Nome { get; set; }
+        public string Nome { get; set; } = "xx";
 
         [Display(Name = "Última Busca")]
         public DateTime? UltimaBusca { get; set; }

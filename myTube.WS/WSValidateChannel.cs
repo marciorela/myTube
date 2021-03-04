@@ -52,20 +52,27 @@ namespace myTube.WS
             var canais = await _canalRepository.GetByStatus(EStatusCanal.Validar);
             foreach (var canal in canais)
             {
-                var info = await _youTubeServices.GetChannelInfo(canal.Usuario.ApiKey, canal.YoutubeCanalId);
-
-                if (info != null)
+                try
                 {
-                    canal.CustomUrl = info.CustomUrl;
-                    canal.Description = info.Description;
-                    canal.PublishedAt = info.PublishedAt;
-                    canal.ThumbnailMinUrl = info.ThumbnailMinUrl;
-                    canal.ThumbnailMediumUrl = info.ThumbnailMediumUrl;
-                    canal.ThumbnailMaxUrl = info.ThumbnailMaxUrl;
-                    canal.Title = info.Title;
-                    canal.Status = EStatusCanal.Ativo;
+                    var info = await _youTubeServices.GetChannelInfo(canal.Usuario.ApiKey, canal.YoutubeCanalId);
 
-                    await _canalRepository.Update(canal);
+                    if (info != null)
+                    {
+                        canal.CustomUrl = info.CustomUrl;
+                        canal.Description = info.Description;
+                        canal.PublishedAt = info.PublishedAt;
+                        canal.ThumbnailMinUrl = info.ThumbnailMinUrl;
+                        canal.ThumbnailMediumUrl = info.ThumbnailMediumUrl;
+                        canal.ThumbnailMaxUrl = info.ThumbnailMaxUrl;
+                        canal.Title = info.Title;
+                        canal.Status = EStatusCanal.Ativo;
+
+                        await _canalRepository.Update(canal);
+                    }
+                }
+                catch (Exception e)
+                {
+                    await _canalRepository.SetError(canal, e);
                 }
             }
         }

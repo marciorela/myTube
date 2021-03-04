@@ -31,5 +31,37 @@ namespace myTube.Controllers
 
             return View(videos);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Assistido(Guid id)
+        {
+            await _videoRepository.ChangeStatus(id, EStatusVideo.Assistido);
+
+            return Ok();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Ignorado(Guid id)
+        {
+            await _videoRepository.ChangeStatus(id, EStatusVideo.Ignorado);
+
+            return Ok();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Favorito(Guid id)
+        {
+            await _videoRepository.ChangeStatus(id, EStatusVideo.Favorito);
+
+            return Ok();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> AssistirDepois(Guid id)
+        {
+            await _videoRepository.ChangeStatus(id, EStatusVideo.AssistirDepois);
+
+            return Ok();
+        }
     }
 }

@@ -41,7 +41,7 @@ namespace myTube.Domain.Entities
         [StringLength(150)]
         public string ThumbnailMaxUrl { get; set; }
 
-        public DateTime DataStatus { get; set; }
+        public DateTime DataStatus { get; set; } = DateTime.Now;
 
         [Required]
         public EStatusVideo Status { get; set; } = EStatusVideo.NaoAssistido;

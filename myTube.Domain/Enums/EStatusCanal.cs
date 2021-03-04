@@ -14,6 +14,7 @@ namespace myTube.Domain.Enums
         Validar = 2,
 
         [Description("Canal não existe")]
-        CanalNaoExiste = 3
+        CanalNaoExiste = 3,
+        Erro = 4
     }
 }
