@@ -18,6 +18,7 @@ namespace myTube.Domain.Enums
 
         Favorito,
 
+        [Description("Assistir depois")]
         AssistirDepois
     }
 }

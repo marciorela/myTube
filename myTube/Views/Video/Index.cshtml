@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<myTube.Domain.Entities.Filme>
 
-    <link href="~/css/video.css" rel="stylesheet" />
+<link href="~/css/video.css" rel="stylesheet" />
 
 @{
     ViewData["Title"] = "Index";
@@ -8,68 +8,74 @@
 
 @foreach (var item in Model)
 {
-    <div class="row pb-2" id="item-@item.Id">
+    var linkTo="https://www.youtube.com/watch?v=" + item.YoutubeFilmeId;
+    var duration = new TimeSpan(0, 0, (int)item.DurationSecs);
 
-        <div class="col-12">
+<div class="row pb-2" id="item-@item.Id">
 
-            <div class="d-flex border px-2">
+    <div class="col-12">
 
-                <div>
-                    <a href="https://www.youtube.com/watch?v=@item.YoutubeFilmeId" target="_blank">
-                        <img src="@Html.DisplayFor(modelItem => item.ThumbnailMinUrl)" />
+        <div class="d-flex border px-2">
+
+            <div>
+                <a href="@linkTo" target="_blank">
+                    <img src="@Html.DisplayFor(modelItem => item.ThumbnailMinUrl)" />
+                </a>
+            </div>
+
+            <div class="flex-fill d-flex flex-column px-2">
+
+                <div class="title flex-fill">
+                    <a href="@linkTo" target="_blank">
+                        @item.Title
                     </a>
                 </div>
 
-                <div class="flex-fill d-flex flex-column px-2">
+                <div class="d-flex rodape">
 
-                    <div class="title flex-fill">
-                        @item.Title
+                    <div class="duration">
+                        <label>@duration</label>
                     </div>
 
-                    <div class="d-flex rodape">
-
-                        <div class="duration">
-                            @{
-                                var t = new TimeSpan(0, 0, (int)item.DurationSecs);
-                                <label>@t</label>
-                            }
-                        </div>
-
-                        <div class="published flex-fill">
-                            @item.PublishedAt
-                        </div>
-
-                        <div class="channel flex-fill text-right">
-                            @item.Canal.Title
-                        </div>
-
+                    <div class="published flex-fill">
+                        @item.PublishedAt
                     </div>
-                </div>
 
-                <div>
-                    <i class="icon icon-green far fa-check-square" onclick="setAssistido('@item.Id')"></i>
-                    <i class="icon icon-blue far fa-clock" onclick="setAssistirDepois('@item.Id')"></i>
-                    <i class="icon icon-yellow far fa-star" onclick="setFavorito('@item.Id')"></i>
-                    <i class="icon icon-red far fa-minus-square" onclick="setIgnorado('@item.Id')"></i>
-                </div>
+                    <div class="channel flex-fill text-right">
+                        @item.Canal.Title
+                    </div>
 
+                </div>
+            </div>
+
+            <div>
+                <button class="icon icon-green far fa-check-square" onclick="setAssistido('@item.Id', '@item.Title')"></button>
+                <button class="icon icon-blue far fa-clock" onclick="setAssistirDepois('@item.Id', '@item.Title')"></button>
+                <button class="icon icon-yellow far fa-star" onclick="setFavorito('@item.Id', '@item.Title')"></button>
+                <button class="icon icon-red far fa-minus-square" onclick="setIgnorado('@item.Id', '@item.Title')"></button>
+                @*<i class="icon icon-green far fa-check-square" onclick="setAssistido('@item.Id', '@item.Title')"></i>*@
+                @*<i class="icon icon-blue far fa-clock" onclick="setAssistirDepois('@item.Id', '@item.Title')"></i>*@
+                @*<i class="icon icon-yellow far fa-star" onclick="setFavorito('@item.Id', '@item.Title')"></i>*@
+                @*<i class="icon icon-red far fa-minus-square" onclick="setIgnorado('@item.Id', '@item.Title')"></i>*@
             </div>
 
         </div>
+
     </div>
+</div>
 }
 
 <script>
-    function setAssistido(id) {
+    function setAssistido(id, nome) {
         let params = {
             url: `@Url.Action("Assistido", "Video")/${id}`,
             method: 'get',
             success: () => {
-                toastr.success('Video marcado como Assistido', 'myTube');
+                toastr.success('Video marcado como Assistido', `${nome}`);
                 $(`#item-${id}`).fadeOut('slow', () => $(this).remove());
                 $(`#item-${id}`).remove();
             },
-            error: (resp) => { toastr.error(resp.statusText, 'myTube'); },
+            error: (resp) => { toastr.error(resp.statusText, `${nome}`); },
             complete: () => { }
         };
 
@@ -81,11 +87,11 @@
             url: `@Url.Action("Ignorado", "Video")/${id}`,
             method: 'get',
             success: () => {
-                toastr.warning('Video marcado como Ignorado', 'myTube');
+                toastr.warning('Video marcado como Ignorado', `${nome}`);
                 $(`#item-${id}`).fadeOut('slow', () => $(this).remove());
                 $(`#item-${id}`).remove();
             },
-            error: (resp) => { toastr.error(resp.statusText, 'myTube'); },
+            error: (resp) => { toastr.error(resp.statusText, `${nome}`); },
             complete: () => { }
         };
 
@@ -97,11 +103,11 @@
             url: `@Url.Action("Favorito", "Video")/${id}`,
             method: 'get',
             success: () => {
-                toastr.warning('Video marcado como Favorito', 'myTube');
+                toastr.warning('Video marcado como Favorito', `${nome}`);
                 $(`#item-${id}`).fadeOut('slow', () => $(this).remove());
                 $(`#item-${id}`).remove();
             },
-            error: (resp) => { toastr.error(resp.statusText, 'myTube'); },
+            error: (resp) => { toastr.error(resp.statusText, `${nome}`); },
             complete: () => { }
         };
 
@@ -113,11 +119,11 @@
             url: `@Url.Action("AssistirDepois", "Video")/${id}`,
             method: 'get',
             success: () => {
-                toastr.info('Video marcado como Assistir Depois', 'myTube');
+                toastr.info('Video marcado como Assistir Depois', `${nome}`);
                 $(`#item-${id}`).fadeOut('slow', () => $(this).remove());
                 $(`#item-${id}`).remove();
             },
-            error: (resp) => { toastr.error(resp.statusText, 'myTube'); },
+            error: (resp) => { toastr.error(resp.statusText, `${nome}`); },
             complete: () => { }
         };
 

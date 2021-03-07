@@ -16,6 +16,8 @@ using myTube.Services;
 using Microsoft.AspNetCore.Http;
 using myTube.Automapper;
 using AutoMapper;
+using System.Globalization;
+using Microsoft.AspNetCore.Localization;
 
 namespace myTube
 {
@@ -60,7 +62,7 @@ namespace myTube
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (true) //(env.IsDevelopment())
+            if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
@@ -70,6 +72,24 @@ namespace myTube
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            var culture = "pt-BR";
+            //var culture = "en-US";
+            //{            RequestLocalizationOptions localizationOptions = new RequestLocalizationOptions
+            //            {
+            //                SupportedCultures = new List<CultureInfo> { new CultureInfo(culture) },
+            //                SupportedUICultures = new List<CultureInfo> { new CultureInfo(culture) },
+            //                DefaultRequestCulture = new RequestCulture(culture)
+            //            };
+            //            app.UseRequestLocalization(localizationOptions);
+
+            var cultureInfo = new CultureInfo(culture, true);
+
+            //cultureInfo.DateTimeFormat.AMDesignator = "a.m.";
+            //cultureInfo.DateTimeFormat.DateSeparator = "-";
+            CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
+            CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
