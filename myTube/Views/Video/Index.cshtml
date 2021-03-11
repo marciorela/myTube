@@ -48,7 +48,7 @@
                 </div>
             </div>
 
-            <div>
+            <div class="buttons">
                 <button class="icon icon-green far fa-check-square" onclick="setAssistido('@item.Id', '@item.Title')"></button>
                 <button class="icon icon-blue far fa-clock" onclick="setAssistirDepois('@item.Id', '@item.Title')"></button>
                 <button class="icon icon-yellow far fa-star" onclick="setFavorito('@item.Id', '@item.Title')"></button>
@@ -82,7 +82,7 @@
         $.ajax(params)
     }
 
-    function setIgnorado(id) {
+    function setIgnorado(id, nome) {
         let params = {
             url: `@Url.Action("Ignorado", "Video")/${id}`,
             method: 'get',
@@ -98,7 +98,7 @@
         $.ajax(params)
     }
 
-    function setFavorito(id) {
+    function setFavorito(id, nome) {
         let params = {
             url: `@Url.Action("Favorito", "Video")/${id}`,
             method: 'get',
@@ -114,7 +114,7 @@
         $.ajax(params)
     }
 
-    function setAssistirDepois(id) {
+    function setAssistirDepois(id, nome) {
         let params = {
             url: `@Url.Action("AssistirDepois", "Video")/${id}`,
             method: 'get',

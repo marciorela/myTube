@@ -25,7 +25,8 @@ namespace myTube.Data
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
-            optionsBuilder.UseSqlServer(_config.GetConnectionString("SQLServer"), b => b.MigrationsAssembly("myTube.Data"));
+            optionsBuilder.UseMySql(_config.GetConnectionString("MySQL"), b => b.MigrationsAssembly("myTube.Data"));
+            //optionsBuilder.UseSqlServer(_config.GetConnectionString("SQLServer"), b => b.MigrationsAssembly("myTube.Data"));
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

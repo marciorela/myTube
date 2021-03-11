@@ -88,9 +88,9 @@ namespace myTube.Services.Youtube
                         CustomUrl = searchListResponse.Items[0].Snippet.CustomUrl,
                         Description = searchListResponse.Items[0].Snippet.Description,
                         PublishedAt = (DateTime)searchListResponse.Items[0].Snippet.PublishedAt,
-                        ThumbnailMinUrl = searchListResponse.Items[0].Snippet.Thumbnails.Default__.Url,
-                        ThumbnailMediumUrl = searchListResponse.Items[0].Snippet.Thumbnails.Medium.Url,
-                        ThumbnailMaxUrl = searchListResponse.Items[0].Snippet.Thumbnails.High.Url,
+                        ThumbnailMinUrl = searchListResponse.Items[0].Snippet.Thumbnails.Default__.Url.Replace("_live",""),
+                        ThumbnailMediumUrl = searchListResponse.Items[0].Snippet.Thumbnails.Medium.Url.Replace("_live",""),
+                        ThumbnailMaxUrl = searchListResponse.Items[0].Snippet.Thumbnails.High.Url.Replace("_live",""),
                         Title = searchListResponse.Items[0].Snippet.Title,
                         ETag = searchListResponse.Items[0].Snippet.ETag,
                         Id = searchListResponse.Items[0].Id
