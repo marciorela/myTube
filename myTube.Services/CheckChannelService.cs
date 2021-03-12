@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using myTube.Data.Repositories;
 using myTube.Domain.Entities;
 using myTube.Domain.Enums;
@@ -8,19 +7,18 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 
-namespace myTube.WS
+namespace myTube.Services
 {
-    public class WSValidateChannel : BackgroundService
+    public class CheckChannelService
     {
-        private ILogger<WSValidateChannel> _logger;
-        private CanalRepository _canalRepository;
-        private YoutubeServices _youTubeServices;
+        private readonly ILogger<CheckChannelService> _logger;
+        private readonly CanalRepository _canalRepository;
+        private readonly YoutubeServices _youTubeServices;
 
-        public WSValidateChannel(
-            ILogger<WSValidateChannel> logger,
+        public CheckChannelService(
+            ILogger<CheckChannelService> logger,
             CanalRepository canalRepository,
             YoutubeServices youTubeServices)
         {
@@ -29,32 +27,15 @@ namespace myTube.WS
             _youTubeServices = youTubeServices;
         }
 
-        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
-        {
-            while (!stoppingToken.IsCancellationRequested)
-            {
-                _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
-
-                try
-                {
-                    await ValidarCanaisPendentes();
-                }
-                catch (Exception e)
-                {
-                    _logger.LogError(e, e.Message);
-                }
-
-                await Task.Delay(60000, stoppingToken);
-            }
-        }
-
-        private async Task ValidarCanaisPendentes()
+        public async Task ValidarCanaisPendentes()
         {
             try
             {
+                _logger.LogInformation("Validando novos canais...");
                 var canaisValidar = await _canalRepository.GetByStatus(EStatusCanal.Validar);
                 await ValidarCanais(canaisValidar);
 
+                _logger.LogInformation("Validando canais com erro de quota...");
                 var canaisQuota = await _canalRepository.GetByStatus(EStatusCanal.QuotaExceeded);
                 await ValidarCanais(canaisQuota);
             }
@@ -104,7 +85,7 @@ namespace myTube.WS
                     }
                 }
             }
+
         }
     }
 }
-

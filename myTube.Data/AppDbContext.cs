@@ -17,6 +17,8 @@ namespace myTube.Data
         public DbSet<Canal> Canais { get; set; }
         public DbSet<Filme> Filmes { get; set; }
 
+        public bool InUse { get; set; } = false;
+
         public AppDbContext(IConfiguration config)
         {
             _config = config;

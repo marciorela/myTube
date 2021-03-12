@@ -1,30 +1,25 @@
-using Google.Apis.Services;
-using Google.Apis.YouTube.v3;
-using Google.Apis.YouTube.v3.Data;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+Ôªøusing Microsoft.Extensions.Logging;
 using myTube.Data.Repositories;
 using myTube.Domain.Entities;
 using myTube.Services.Youtube;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
-using System.Threading;
+using System.Text;
 using System.Threading.Tasks;
 
-namespace myTube.WS
+namespace myTube.Services
 {
-    public class WSCheckNewVideos : BackgroundService
+    public class CheckVideoService
     {
-        private readonly ILogger<WSCheckNewVideos> _logger;
+        private readonly ILogger<CheckVideoService> _logger;
         private readonly UsuarioRepository _usuarioRepository;
         private readonly CanalRepository _canalRepository;
         private readonly VideoRepository _filmeRepository;
         private readonly YoutubeServices _youTubeServices;
 
-        public WSCheckNewVideos(
-            ILogger<WSCheckNewVideos> logger,
+        public CheckVideoService(
+            ILogger<CheckVideoService> logger,
             UsuarioRepository usuarioRepository,
             CanalRepository canalRepository,
             VideoRepository filmeRepository,
@@ -38,27 +33,9 @@ namespace myTube.WS
             _youTubeServices = youTubeServices;
         }
 
-        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
-        {
-            while (!stoppingToken.IsCancellationRequested)
-            {
-                _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
-
-                try
-                {
-                    await GetMovies();
-                }
-                catch (Exception e)
-                {
-                    _logger.LogError(e, e.Message);
-                }
-
-                await Task.Delay(120000, stoppingToken);
-            }
-        }
-
         public async Task GetMovies()
         {
+            _logger.LogInformation("Validando videos...");
             var usuarios = await _usuarioRepository.ListAtivos();
             foreach (var usuario in usuarios)
             {
@@ -77,7 +54,7 @@ namespace myTube.WS
                 if ((DateTime.Now - ultimaBusca).TotalHours >= 8)
                 {
 
-                    // SEMPRE BUSCAR A PARTIR DAS 0:00 DO DIA ANTERIOR AO ⁄LTIMO VÕDEO
+                    // SEMPRE BUSCAR A PARTIR DAS 0:00 DO DIA ANTERIOR AO √öLTIMO V√çDEO
                     var publishedAfter = canal.PrimeiraBusca;
                     if (canal.UltimoVideo != null)
                     {
@@ -122,6 +99,7 @@ namespace myTube.WS
                 }
             }
         }
+
 
     }
 }
