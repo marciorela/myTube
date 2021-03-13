@@ -208,6 +208,7 @@ namespace myTube.Services.Youtube
                     var searchListRequest = _youtubeService.Search.List("snippet");
                     searchListRequest.MaxResults = 50;
                     searchListRequest.ChannelId = channelId;
+                    searchListRequest.Type = "video";
                     searchListRequest.PageToken = nextpagetoken;
                     searchListRequest.PublishedAfter = publishedAfter;
 

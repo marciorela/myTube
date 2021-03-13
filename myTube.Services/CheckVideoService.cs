@@ -61,45 +61,51 @@ namespace myTube.Services
                         publishedAfter = ((DateTime)canal.UltimoVideo).Date.AddDays(-1);
                     }
 
-                    var maxData = canal.UltimoVideo;
-                    var filmes = await _youTubeServices.GetVideosByChannelId(usuario.ApiKey, canal.YoutubeCanalId, publishedAfter);
-                    foreach (var filme in filmes)
+                    try
                     {
-
-                        var filmeDB = await _filmeRepository.GetByYoutubeId(filme.Id, usuario.Id);
-                        if (filmeDB == null)
+                        var maxData = canal.UltimoVideo;
+                        var filmes = await _youTubeServices.GetVideosByChannelId(usuario.ApiKey, canal.YoutubeCanalId, publishedAfter);
+                        foreach (var filme in filmes)
                         {
-                            await _filmeRepository.Add(new Filme()
+
+                            var filmeDB = await _filmeRepository.GetByYoutubeId(filme.Id, usuario.Id);
+                            if (filmeDB == null)
                             {
-                                CanalId = canal.Id,
+                                await _filmeRepository.Add(new Filme()
+                                {
+                                    CanalId = canal.Id,
 
-                                YoutubeFilmeId = filme.Id,
-                                DurationSecs = filme.DurationSecs,
-                                PublishedAt = filme.PublishedAt,
-                                ScheduledStartTime = filme.ScheduledStartTime,
-                                Summary = filme.Summary,
-                                Description = filme.Description,
-                                ThumbnailMaxUrl = filme.ThumbnailMaxUrl,
-                                ThumbnailMediumUrl = filme.ThumbnailMediumUrl,
-                                ThumbnailMinUrl = filme.ThumbnailMinUrl,
-                                Title = filme.Title,
-                                ETag = filme.ETag ?? ""
-                            });
+                                    YoutubeFilmeId = filme.Id,
+                                    DurationSecs = filme.DurationSecs,
+                                    PublishedAt = filme.PublishedAt,
+                                    ScheduledStartTime = filme.ScheduledStartTime,
+                                    Summary = filme.Summary,
+                                    Description = filme.Description,
+                                    ThumbnailMaxUrl = filme.ThumbnailMaxUrl,
+                                    ThumbnailMediumUrl = filme.ThumbnailMediumUrl,
+                                    ThumbnailMinUrl = filme.ThumbnailMinUrl,
+                                    Title = filme.Title,
+                                    ETag = filme.ETag ?? ""
+                                });
 
-                            try
-                            {
-                                maxData ??= filme.PublishedAt;
+                                try
+                                {
+                                    maxData ??= filme.PublishedAt;
 
-                                maxData = new DateTime(Math.Max(((DateTime)maxData).Ticks, ((DateTime)filme.PublishedAt).Ticks));
+                                    maxData = new DateTime(Math.Max(((DateTime)maxData).Ticks, ((DateTime)filme.PublishedAt).Ticks));
+                                }
+                                catch { }
                             }
-                            catch { }
                         }
+                        await _canalRepository.UpdateUltimaBusca(canal, DateTime.Now, maxData);
                     }
-                    await _canalRepository.UpdateUltimaBusca(canal, DateTime.Now, maxData);
+                    catch (Exception e)
+                    {
+                        _logger.LogError(e, e.Message);
+                    }
                 }
             }
         }
-
 
     }
 }

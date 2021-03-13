@@ -64,6 +64,7 @@ namespace myTube.WS
                     _logger.LogError(e, e.Message);
                 }
 
+                _logger.LogInformation("Aguardando...");
                 await Task.Delay(60000, stoppingToken);
             }
         }
