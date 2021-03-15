@@ -26,6 +26,14 @@ namespace myTube.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> PlayVideo(Guid id)
+        {
+            var video = await _videoRepository.GetById(id);
+
+            return PartialView("_PlayVideo", video);
+        }
+
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
             var videos = await _videoRepository.GetByStatus(_usuarioService.Id, EStatusVideo.NaoAssistido);

@@ -80,3 +80,33 @@ a {
     min-width: 210px;
     text-align: right;
 }
+
+.modal-dialog iframe {
+    margin: 0 auto;
+    display: block;
+}
+
+.modal-dialog {
+    max-width: 70%;
+    /*max-height: 80%;*/
+    background-color: dimgray;
+    
+    overflow-y: initial !important
+}
+
+.modal-content {
+    background-color: black;
+}
+
+button.close {
+    color: white;
+}
+
+button.close:hover {
+    color: white !important;
+}
+
+.modal-footer {
+    height: 250px;
+    overflow-y: auto;
+}

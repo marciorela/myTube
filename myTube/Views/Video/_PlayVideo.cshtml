@@ -1,0 +1,92 @@
+﻿@model myTube.Domain.Entities.Filme
+
+<div id="playVideo" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="">@Model.Title</h5>
+
+                <div class="buttons">
+                    <button class="icon icon-green far fa-check-square" data-dismiss="modal" onclick="setAssistido('@Model.Id', '@Model.Title')"></button>
+                    <button class="icon icon-blue far fa-clock" data-dismiss="modal" onclick="setAssistirDepois('@Model.Id', '@Model.Title')"></button>
+                    <button class="icon icon-yellow far fa-star" data-dismiss="modal" onclick="setFavorito('@Model.Id', '@Model.Title')"></button>
+                    <button class="icon icon-red far fa-minus-square" data-dismiss="modal" onclick="setIgnorado('@Model.Id', '@Model.Title')"></button>
+                    <button class="icon icon-red far fa-question-circle" data-dismiss="modal" onclick="setConsole('@Model.Id', '@Model.Title')"></button>
+                    
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <div class="speed">
+                    <button onclick="setSpeed(1)">1x</button>
+                    <button onclick="setSpeed(1.5)">1.5x</button>
+                    <button onclick="setSpeed(2)">2x</button>
+                </div>
+
+            </div>
+
+            <div class="modal-body">
+                <div class="embed-responsive embed-responsive-16by9">
+                    @*<iframe id="ytplayer" type="text/html" width="720" height="405" src="https://www.youtube.com/embed/@Model.YoutubeFilmeId?autoplay=1&enablejsapi=1" frameborder="0" allowfullscreen></iframe>*@
+                    @*<iframe id="frameVideo" class="embed-responsive-item" src="//www.youtube.com/embed/@Model.YoutubeFilmeId" allowfullscreen></iframe>*@
+
+                    <div id="player"></div>
+                </div>
+            </div>
+
+            @*<div class="modal-footer">
+                    @Model.Description
+                </div>*@
+        </div>
+    </div>
+</div>
+
+<script>
+    $("#playVideo").on('hide.bs.modal', function () {
+        //console.log('aqui hide.bs.modal');
+        stopVideo();
+    });
+
+    player = new YT.Player('player', {
+        videoId: '@Model.YoutubeFilmeId',
+        width: 1280,
+        height: 960,
+        playerVars: {
+            'controls': 1
+        },
+        events: {
+            'onReady': onPlayerReady
+        }
+    });
+
+    function setSpeed(speed) {
+        player.setPlaybackRate(speed);
+    }
+
+    // 4. The API will call this function when the video player is ready.
+    function onPlayerReady(event) {
+        //console.log('aqui onPlayerReady');
+
+        event.target.setPlaybackRate(2)
+        event.target.playVideo();
+        event.target.setPlaybackQuality('hd1080');
+    }
+
+    // 5. The API calls this function when the player's state changes.
+    //    The function indicates that when playing a video (state=1),
+    //    the player should play for six seconds and then stop.
+    var done = false;
+    function onPlayerStateChange(event) {
+        //console.log('aqui onPlayerStateChange');
+
+        if (event.data == YT.PlayerState.PLAYING && !done) {
+            //setTimeout(stopVideo, 6000);
+            done = true;
+        }
+    }
+
+    function stopVideo() {
+        //console.log('aqui stopVideo');
+
+        player.stopVideo();
+    }
+</script>

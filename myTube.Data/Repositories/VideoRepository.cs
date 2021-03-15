@@ -30,6 +30,15 @@ namespace myTube.Data.Repositories
             await _ctx.SaveChangesAsync();
         }
 
+        public async Task<Filme> GetById(Guid id)
+        {
+            return await _ctx.Filmes
+                .Include(c => c.Canal)
+                .Include(c => c.Canal.Usuario)
+                .Where(f => f.Id == id)
+                .FirstOrDefaultAsync();
+        }
+
         public async Task<IEnumerable<Filme>> GetByStatus(Guid usuarioId, EStatusVideo status)
         {
             return await _ctx.Filmes
