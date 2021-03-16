@@ -1,6 +1,6 @@
-﻿function setIgnorado(id, nome) {
+﻿function setAssistido(id, nome) {
     let params = {
-        url: `@Url.Action("Assistido", "Video")/${id}`,
+        url: `/video/assistido/${id}`,
         method: 'get',
         success: () => {
             toastr.success('Video marcado como Assistido', `${nome}`);
@@ -16,7 +16,7 @@
 
 function setIgnorado(id, nome) {
     let params = {
-        url: `@Url.Action("Ignorado", "Video")/${id}`,
+        url: `/video/ignorado/${id}`,
         method: 'get',
         success: () => {
             toastr.warning('Video marcado como Ignorado', `${nome}`);
@@ -32,7 +32,7 @@ function setIgnorado(id, nome) {
 
 function setFavorito(id, nome) {
     let params = {
-        url: `@Url.Action("Favorito", "Video")/${id}`,
+        url: `/video/favorito/${id}`,
         method: 'get',
         success: () => {
             toastr.warning('Video marcado como Favorito', `${nome}`);
@@ -48,7 +48,7 @@ function setFavorito(id, nome) {
 
 function setAssistirDepois(id, nome) {
     let params = {
-        url: `@Url.Action("AssistirDepois", "Video")/${id}`,
+        url: `/video/AssistirDepois/${id}`,
         method: 'get',
         success: () => {
             toastr.info('Video marcado como Assistir Depois', `${nome}`);
