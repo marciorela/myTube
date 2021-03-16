@@ -54,20 +54,29 @@
     font-size: 0.8rem;
 }
 
-    .rodape label {
-        margin-bottom: 0;
-    }
+.rodape label {
+    margin-bottom: 0;
+}
 
-    .rodape .duration {
-        background-color: #B9B9B9;
-        color: black;
-        padding: 0px 2px;
-        margin-bottom: 10px;
-    }
+.rodape .duration {
+    background-color: #B9B9B9;
+    color: black;
+    padding: 0px 2px;
+    margin-bottom: 10px;
+}
 
-    .rodape .published {
-        margin-left: 20%;
-    }
+.rodape .duration-area {
+    min-width: 110px;
+}
+
+.rodape .published {
+    margin-left: 20%;
+}
+
+.rodape .live {
+    color: white;
+    background-color: red;
+}
 
 .title {
     font-weight: 500;
@@ -96,9 +105,9 @@ a {
     border-radius: 2px;
 }
 
-    .speed-button:focus {
-        outline: none;
-    }
+.speed-button:focus {
+    outline: none;
+}
 
 .speed-selected {
     background-color: white;

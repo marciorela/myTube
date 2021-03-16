@@ -38,8 +38,17 @@
 
                     <div class="d-flex rodape">
 
-                        <div class="duration">
-                            <label>@duration</label>
+                        <div class="duration-area">
+
+                            @if (item.ScheduledStartTime > DateTime.Now)
+                            {
+                                @*MANTIDO PARA FINS DIDATICOS*@
+                                <label class="duration @(item.ScheduledStartTime > DateTime.Now ? "live" : "")">@(((DateTime)item.ScheduledStartTime).ToString("dd/MM/yyyy HH:mm"))</label>
+                            }
+                            else
+                            {
+                                <label class="duration">@duration</label>
+                            }
                         </div>
 
                         <div class="published flex-fill">
