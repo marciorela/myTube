@@ -1,22 +1,24 @@
 ﻿.icon {
-  font-size: 2em;
-  cursor: pointer;
-  margin-left: 5px;
-
-  border: none;
-  background-color: black;
+    font-size: 2em;
+    cursor: pointer;
+    margin-right: 5px;
+    /* margin-left: 0px; */
+    padding-left: 0;
+    padding-top: 0;
+    border: none;
+    background-color: black;
 }
 
 .icon-normal {
-  color: tomato;
+    color: tomato;
 }
 
 .icon-selected {
-  color: green;
+    color: green;
 }
 
 .icon-unselected {
-  color: gray;
+    color: gray;
 }
 
 .icon-green {
@@ -52,20 +54,20 @@
     font-size: 0.8rem;
 }
 
-.rodape label {
-    margin-bottom: 0;
-}
+    .rodape label {
+        margin-bottom: 0;
+    }
 
-.rodape .duration {
-    background-color: #B9B9B9;
-    color: black;
-    padding: 0px 2px;
-    margin-bottom: 10px;
-}
+    .rodape .duration {
+        background-color: #B9B9B9;
+        color: black;
+        padding: 0px 2px;
+        margin-bottom: 10px;
+    }
 
-.rodape .published {
-    margin-left: 20%;
-}
+    .rodape .published {
+        margin-left: 20%;
+    }
 
 .title {
     font-weight: 500;
@@ -78,7 +80,28 @@ a {
 
 .buttons {
     min-width: 210px;
-    text-align: right;
+    /* text-align: right; */
+}
+
+.speed-button {
+    font-size: 1em;
+    cursor: pointer;
+    margin-right: 5px;
+    min-width: 50px;
+    /* margin-left: 0px; */
+    padding: 0;
+    border: none;
+    text-align: center;
+    background-color: gray;
+    border-radius: 2px;
+}
+
+    .speed-button:focus {
+        outline: none;
+    }
+
+.speed-selected {
+    background-color: white;
 }
 
 .modal-dialog iframe {
@@ -90,7 +113,6 @@ a {
     max-width: 70%;
     /*max-height: 80%;*/
     background-color: dimgray;
-    
     overflow-y: initial !important
 }
 
@@ -102,11 +124,16 @@ button.close {
     color: white;
 }
 
-button.close:hover {
-    color: white !important;
-}
+    button.close:hover {
+        color: white !important;
+    }
 
 .modal-footer {
     height: 250px;
     overflow-y: auto;
+}
+
+h5 {
+    margin-top: 8px;
+    margin-bottom: 0;
 }

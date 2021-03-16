@@ -1,34 +1,42 @@
 ﻿@model myTube.Domain.Entities.Filme
 
 <div id="playVideo" class="modal fade">
+
     <div class="modal-dialog">
+
         <div class="modal-content">
+
             <div class="modal-header">
-                <h5 class="">@Model.Title</h5>
 
-                <div class="buttons">
-                    <button class="icon icon-green far fa-check-square" data-dismiss="modal" onclick="setAssistido('@Model.Id', '@Model.Title')"></button>
-                    <button class="icon icon-blue far fa-clock" data-dismiss="modal" onclick="setAssistirDepois('@Model.Id', '@Model.Title')"></button>
-                    <button class="icon icon-yellow far fa-star" data-dismiss="modal" onclick="setFavorito('@Model.Id', '@Model.Title')"></button>
-                    <button class="icon icon-red far fa-minus-square" data-dismiss="modal" onclick="setIgnorado('@Model.Id', '@Model.Title')"></button>
-                    <button class="icon icon-red far fa-question-circle" data-dismiss="modal" onclick="setConsole('@Model.Id', '@Model.Title')"></button>
+                <div class="container-fluid">
+
+                    <div class="d-flex flex-row">
+                        <div class="flex-fill buttons">
+                            <button class="icon icon-green far fa-check-square" data-dismiss="modal" onclick="setAssistido('@Model.Id', '@Model.Title')"></button>
+                            <button class="icon icon-blue far fa-clock" data-dismiss="modal" onclick="setAssistirDepois('@Model.Id', '@Model.Title')"></button>
+                            <button class="icon icon-yellow far fa-star" data-dismiss="modal" onclick="setFavorito('@Model.Id', '@Model.Title')"></button>
+                            <button class="icon icon-red far fa-minus-square" data-dismiss="modal" onclick="setIgnorado('@Model.Id', '@Model.Title')"></button>
+                            @*                            <button class="icon icon-red far fa-question-circle" data-dismiss="modal" onclick="setConsole('@Model.Id', '@Model.Title')"></button>*@
+
+                        </div>
+
+                        <div class="speed-group">
+                            <button id="1x"   class="speed-button" onclick="setSpeed(1)">1x</button>
+                            <button id="1.5x" class="speed-button" onclick="setSpeed(1.5)">1.5x</button>
+                            <button id="2x"   class="speed-button" onclick="setSpeed(2)">2x</button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h5 class="">@Model.Title</h5>
+                    </div>
+                </div>
                     
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                </div>
-
-                <div class="speed">
-                    <button onclick="setSpeed(1)">1x</button>
-                    <button onclick="setSpeed(1.5)">1.5x</button>
-                    <button onclick="setSpeed(2)">2x</button>
-                </div>
-
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
 
             <div class="modal-body">
                 <div class="embed-responsive embed-responsive-16by9">
-                    @*<iframe id="ytplayer" type="text/html" width="720" height="405" src="https://www.youtube.com/embed/@Model.YoutubeFilmeId?autoplay=1&enablejsapi=1" frameborder="0" allowfullscreen></iframe>*@
-                    @*<iframe id="frameVideo" class="embed-responsive-item" src="//www.youtube.com/embed/@Model.YoutubeFilmeId" allowfullscreen></iframe>*@
-
                     <div id="player"></div>
                 </div>
             </div>
@@ -59,6 +67,14 @@
     });
 
     function setSpeed(speed) {
+        const items = [...document.getElementsByClassName('speed-selected')]
+        items.forEach(item => {
+            item.classList.remove('speed-selected')
+        });
+
+        var element = document.getElementById(`${speed}` + "x");
+        element.classList.add("speed-selected");
+
         player.setPlaybackRate(speed);
     }
 
@@ -66,7 +82,8 @@
     function onPlayerReady(event) {
         //console.log('aqui onPlayerReady');
 
-        event.target.setPlaybackRate(2)
+        setSpeed(2);
+        // event.target.setPlaybackRate(2)
         event.target.playVideo();
         event.target.setPlaybackQuality('hd1080');
     }
