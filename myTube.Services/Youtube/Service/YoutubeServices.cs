@@ -2,6 +2,7 @@
 using Google.Apis.YouTube.v3;
 using Google.Apis.YouTube.v3.Data;
 using Microsoft.Extensions.Logging;
+using myTube.Data.Repositories;
 using myTube.Services.Youtube.Model;
 using System;
 using System.Collections.Generic;
@@ -14,18 +15,20 @@ namespace myTube.Services.Youtube
     public class YoutubeServices
     {
         private readonly ILogger<YoutubeServices> _logger;
+        private readonly LogYoutubeRepository _youtubeLogRepository;
 
-        public YoutubeServices(ILogger<YoutubeServices> logger)
+        public YoutubeServices(ILogger<YoutubeServices> logger, LogYoutubeRepository youtubeLogRepository)
         {
             _logger = logger;
+            _youtubeLogRepository = youtubeLogRepository;
         }
 
-        public async Task<List<YoutubeMovie>> GetVideosByChannelId(string apiKey, string channelId, DateTime publishedAfter)
+        public async Task<(List<YoutubeMovie>, int)> GetVideosByChannelId(string apiKey, string channelId, DateTime publishedAfter)
         {
             var result = new List<YoutubeMovie>();
 
             var listIds = new List<string>();
-            var videos = await _GetVideosByChannelId(apiKey, channelId, publishedAfter);
+            var (videos, cost) = await _GetVideosByChannelId(apiKey, channelId, publishedAfter);
             foreach (var video in videos)
             {
                 result.Add(new YoutubeMovie()
@@ -36,32 +39,35 @@ namespace myTube.Services.Youtube
                     Summary = video.Snippet.Description,
                     ETag = video.ETag,
                     PublishedAt = video.Snippet.PublishedAt,
-                    ThumbnailMinUrl = video.Snippet.Thumbnails.Default__.Url,
-                    ThumbnailMediumUrl = video.Snippet.Thumbnails.Medium.Url,
-                    ThumbnailMaxUrl = video.Snippet.Thumbnails.High.Url
+                    ThumbnailMinUrl = video.Snippet.Thumbnails.Default__.Url.Replace("_live", ""),
+                    ThumbnailMediumUrl = video.Snippet.Thumbnails.Medium.Url.Replace("_live", ""),
+                    ThumbnailMaxUrl = video.Snippet.Thumbnails.High.Url.Replace("_live", ""),
                 });
                 listIds.Add(video.Id.VideoId);
 
                 if (listIds.Count >= 40)
                 {
-                    await GetExtraVideosInformation(apiKey, string.Join(",", listIds), result);
+                    cost += await GetExtraVideosInformation(apiKey, string.Join(",", listIds), result);
                     listIds.Clear();
                 }
             }
 
             if (listIds.Count > 0)
             {
-                await GetExtraVideosInformation(apiKey, string.Join(",", listIds), result);
+                cost += await GetExtraVideosInformation(apiKey, string.Join(",", listIds), result);
             }
 
-            return result;
+            await _youtubeLogRepository.Add("GetVideosByChannelId", cost);
+
+            return (result, cost);
         }
 
-        public async Task<YoutubeChannel> GetChannelInfo(string apiKey, string youtubeCanalId)
+        public async Task<(YoutubeChannel, int)> GetChannelInfo(string apiKey, string youtubeCanalId)
         {
-            return await Task.Run(() =>
+            return await Task.Run(async () =>
             {
-                List<Channel> res = new List<Channel>();
+                YoutubeChannel ret = null;
+                var cost = 0;
 
                 var _youtubeService = new YouTubeService(new BaseClientService.Initializer()
                 {
@@ -75,40 +81,47 @@ namespace myTube.Services.Youtube
                 //searchListRequest.MySubscribers = true;
                 searchListRequest.PageToken = " ";
 
-                // Call the search.list method to retrieve results matching the specified query term.
-                var searchListResponse = searchListRequest.Execute();
-
-                // Process  the video responses 
-                //res.AddRange(searchListResponse.Items);
-
-                if (searchListResponse.Items != null && searchListResponse.Items.Count > 0)
+                try
                 {
-                    return new YoutubeChannel()
+                    // Call the search.list method to retrieve results matching the specified query term.
+                    var searchListResponse = searchListRequest.Execute();
+                    cost += 1;
+
+                    // Process  the video responses 
+                    //res.AddRange(searchListResponse.Items);
+
+                    if (searchListResponse.Items != null && searchListResponse.Items.Count > 0)
                     {
-                        CustomUrl = searchListResponse.Items[0].Snippet.CustomUrl,
-                        Description = searchListResponse.Items[0].Snippet.Description,
-                        PublishedAt = (DateTime)searchListResponse.Items[0].Snippet.PublishedAt,
-                        ThumbnailMinUrl = searchListResponse.Items[0].Snippet.Thumbnails.Default__.Url.Replace("_live",""),
-                        ThumbnailMediumUrl = searchListResponse.Items[0].Snippet.Thumbnails.Medium.Url.Replace("_live",""),
-                        ThumbnailMaxUrl = searchListResponse.Items[0].Snippet.Thumbnails.High.Url.Replace("_live",""),
-                        Title = searchListResponse.Items[0].Snippet.Title,
-                        ETag = searchListResponse.Items[0].Snippet.ETag,
-                        Id = searchListResponse.Items[0].Id
-                    };
+                        ret = new YoutubeChannel()
+                        {
+                            CustomUrl = searchListResponse.Items[0].Snippet.CustomUrl,
+                            Description = searchListResponse.Items[0].Snippet.Description,
+                            PublishedAt = (DateTime)searchListResponse.Items[0].Snippet.PublishedAt,
+                            ThumbnailMinUrl = searchListResponse.Items[0].Snippet.Thumbnails.Default__.Url.Replace("_live", ""),
+                            ThumbnailMediumUrl = searchListResponse.Items[0].Snippet.Thumbnails.Medium.Url.Replace("_live", ""),
+                            ThumbnailMaxUrl = searchListResponse.Items[0].Snippet.Thumbnails.High.Url.Replace("_live", ""),
+                            Title = searchListResponse.Items[0].Snippet.Title,
+                            ETag = searchListResponse.Items[0].Snippet.ETag,
+                            Id = searchListResponse.Items[0].Id
+                        };
+                    }
                 }
-                else
+                catch
                 {
-                    return null;
+
                 }
 
+                await _youtubeLogRepository.Add("GetChannelInfo", cost);
+
+                return (ret, cost);
             });
         }
 
-        private async Task GetExtraVideosInformation(string apiKey, string videoIds, List<YoutubeMovie> listMovies)
+        private async Task<int> GetExtraVideosInformation(string apiKey, string videoIds, List<YoutubeMovie> listMovies)
         {
             try
             {
-                var list = await GetInfoVideoAsync(apiKey, videoIds);
+                var (list, cost) = await GetInfoVideoAsync(apiKey, videoIds);
                 foreach (var video in list)
                 {
                     var videoInList = LocateVideoById(video.Id, listMovies);
@@ -123,11 +136,15 @@ namespace myTube.Services.Youtube
                         }
                     }
                 }
+
+                return cost;
             }
             catch (Exception e)
             {
                 _logger.LogError(e, e.Message);
             }
+
+            return 0;
         }
 
         private static double YoutubeTimeToSecs(string youtubeTime)
@@ -150,12 +167,13 @@ namespace myTube.Services.Youtube
             return null;
         }
 
-        private static async Task<List<Video>> GetInfoVideoAsync(string apiKey, string idVideos)
+        private static async Task<(List<Video>, int)> GetInfoVideoAsync(string apiKey, string idVideos)
         {
 
             return await Task.Run(() =>
             {
-                List<Video> res = new List<Video>();
+                List<Video> res = new();
+                var cost = 0;
 
                 var _youtubeService = new YouTubeService(new BaseClientService.Initializer()
                 {
@@ -173,27 +191,35 @@ namespace myTube.Services.Youtube
                     //searchListRequest.MySubscribers = true;
                     //searchListRequest.PageToken = nextpagetoken;
 
-                    // Call the search.list method to retrieve results matching the specified query term.
-                    var searchListResponse = searchListRequest.Execute();
+                    try
+                    {
+                        // Call the search.list method to retrieve results matching the specified query term.
+                        var searchListResponse = searchListRequest.Execute();
+                        cost += 1;
 
-                    // Process  the video responses 
-                    res.AddRange(searchListResponse.Items);
+                        // Process  the video responses 
+                        res.AddRange(searchListResponse.Items);
 
-                    nextpagetoken = searchListResponse.NextPageToken;
-
+                        nextpagetoken = searchListResponse.NextPageToken;
+                    }
+                    catch 
+                    {
+                        throw;
+                    }
                 }
 
-                return res;
+                return (res, cost);
 
             });
         }
 
-        private static async Task<List<SearchResult>> _GetVideosByChannelId(string apiKey, string channelId, DateTime publishedAfter)
+        private static async Task<(List<SearchResult>, int)> _GetVideosByChannelId(string apiKey, string channelId, DateTime publishedAfter)
         {
 
             return await Task.Run(() =>
             {
-                List<SearchResult> res = new List<SearchResult>();
+                List<SearchResult> res = new();
+                var cost = 0;
 
                 var _youtubeService = new YouTubeService(new BaseClientService.Initializer()
                 {
@@ -213,15 +239,23 @@ namespace myTube.Services.Youtube
                     searchListRequest.PublishedAfter = publishedAfter;
 
                     // Call the search.list method to retrieve results matching the specified query term.
-                    var searchListResponse = searchListRequest.Execute();
+                    try
+                    {
+                        var searchListResponse = searchListRequest.Execute();
+                        cost += 100;
 
-                    // Process the video responses 
-                    res.AddRange(searchListResponse.Items);
+                        // Process the video responses 
+                        res.AddRange(searchListResponse.Items);
 
-                    nextpagetoken = searchListResponse.NextPageToken;
+                        nextpagetoken = searchListResponse.NextPageToken;
+                    }
+                    catch
+                    {
+                        throw;
+                    }
                 }
 
-                return res;
+                return (res, cost);
 
             });
         }

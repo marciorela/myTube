@@ -52,7 +52,7 @@ namespace myTube.Services
             {
                 try
                 {
-                    var info = await _youTubeServices.GetChannelInfo(canal.Usuario.ApiKey, canal.YoutubeCanalId);
+                    var (info, cost) = await _youTubeServices.GetChannelInfo(canal.Usuario.ApiKey, canal.YoutubeCanalId);
 
                     if (info != null)
                     {

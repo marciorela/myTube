@@ -16,6 +16,7 @@ namespace myTube.Data
         public DbSet<Usuario> Usuarios { get; set; }
         public DbSet<Canal> Canais { get; set; }
         public DbSet<Filme> Filmes { get; set; }
+        public DbSet<LogYoutube> LogYoutube { get; set; }
 
         public bool InUse { get; set; } = false;
 

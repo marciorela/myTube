@@ -42,6 +42,8 @@ namespace myTube
             services.AddScoped<UsuarioRepository>();
             services.AddScoped<CanalRepository>();
             services.AddScoped<VideoRepository>();
+            services.AddScoped<LogYoutubeRepository>();
+
             services.AddScoped<UsuarioService>();
 
             services.AddAuthentication(options => {

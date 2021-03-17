@@ -28,6 +28,7 @@ namespace myTube.WS
                     services.AddTransient<UsuarioRepository>();
                     services.AddTransient<CanalRepository>();
                     services.AddTransient<VideoRepository>();
+                    services.AddTransient<LogYoutubeRepository>();
 
                     services.AddSingleton<CheckChannelService>();
                     services.AddSingleton<CheckVideoService>();

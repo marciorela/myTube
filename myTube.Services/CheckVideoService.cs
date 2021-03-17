@@ -24,7 +24,7 @@ namespace myTube.Services
             CanalRepository canalRepository,
             VideoRepository filmeRepository,
             YoutubeServices youTubeServices
-            )
+        )
         {
             _logger = logger;
             _usuarioRepository = usuarioRepository;
@@ -46,7 +46,12 @@ namespace myTube.Services
         public async Task GetMoviesByUsuario(Usuario usuario)
         {
 
-            var canais = await _canalRepository.GetAtivos(usuario.Id);
+            // DEVE BUSCAR SOMENTE OS CANAIS ATIVOS
+            // QUE TENHAM PUBLICADO VÍDEOS HÁ MAIS DE 22 HORAS
+            var canais = (await _canalRepository
+                .GetAtivos(usuario.Id))
+                .Where(x => (DateTime.Now - (x.UltimoVideo ?? DateTime.MinValue)).TotalHours >= 22)
+                .ToList();
             foreach (var canal in canais)
             {
 
@@ -64,7 +69,7 @@ namespace myTube.Services
                     try
                     {
                         var maxData = canal.UltimoVideo;
-                        var filmes = await _youTubeServices.GetVideosByChannelId(usuario.ApiKey, canal.YoutubeCanalId, publishedAfter);
+                        var (filmes, cost) = await _youTubeServices.GetVideosByChannelId(usuario.ApiKey, canal.YoutubeCanalId, publishedAfter);
                         foreach (var filme in filmes)
                         {
 
