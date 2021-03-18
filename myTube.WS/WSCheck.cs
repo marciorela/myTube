@@ -39,24 +39,29 @@ namespace myTube.WS
             {
                 try
                 {
-                    _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
+                    // SOMENTE ENTRE 07:00 E 23:59
+                    if (DateTime.Now.Hour >= 7)
+                    {
 
-                    try
-                    {
-                        await _checkChannelService.ValidarCanaisPendentes();
-                    }
-                    catch (Exception e)
-                    {
-                        _logger.LogError(e, e.Message);
-                    }
+                        _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
 
-                    try
-                    {
-                        await _checkVideoService.GetMovies();
-                    }
-                    catch (Exception e)
-                    {
-                        _logger.LogError(e, e.Message);
+                        try
+                        {
+                            await _checkChannelService.ValidarCanaisPendentes();
+                        }
+                        catch (Exception e)
+                        {
+                            _logger.LogError(e, e.Message);
+                        }
+
+                        try
+                        {
+                            await _checkVideoService.GetMovies();
+                        }
+                        catch (Exception e)
+                        {
+                            _logger.LogError(e, e.Message);
+                        }
                     }
                 } 
                 catch (Exception e)

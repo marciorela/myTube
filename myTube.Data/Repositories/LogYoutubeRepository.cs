@@ -28,5 +28,17 @@ namespace myTube.Data.Repositories
 
             await _ctx.SaveChangesAsync();
         }
+
+        public async Task<int> GetCost(DateTime date)
+        {
+            var dataBase = new DateTime(date.Year, date.Month, date.Day, 4, 0, 0);
+
+            return await Task.Run(() =>
+            {
+                return _ctx.LogYoutube
+                .Where(x => x.Data >= dataBase && x.Data < dataBase.AddDays(1))
+                .Sum(x => x.Cost);
+            });
+        }
     }
 }

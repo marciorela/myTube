@@ -16,6 +16,7 @@ namespace myTube.Services
         private readonly UsuarioRepository _usuarioRepository;
         private readonly CanalRepository _canalRepository;
         private readonly VideoRepository _filmeRepository;
+        private readonly LogYoutubeRepository _logYoutubeRepository;
         private readonly YoutubeServices _youTubeServices;
 
         public CheckVideoService(
@@ -23,6 +24,7 @@ namespace myTube.Services
             UsuarioRepository usuarioRepository,
             CanalRepository canalRepository,
             VideoRepository filmeRepository,
+            LogYoutubeRepository logYoutubeRepository,
             YoutubeServices youTubeServices
         )
         {
@@ -30,6 +32,7 @@ namespace myTube.Services
             _usuarioRepository = usuarioRepository;
             _canalRepository = canalRepository;
             _filmeRepository = filmeRepository;
+            _logYoutubeRepository = logYoutubeRepository;
             _youTubeServices = youTubeServices;
         }
 
@@ -55,8 +58,15 @@ namespace myTube.Services
             foreach (var canal in canais)
             {
 
+                double usedQuota = await _logYoutubeRepository.GetCost(DateTime.Now);
+                double availQuota = 9800 - usedQuota;
+                double quoeficient = (availQuota / (canais.Count * 100));
+                double interval = (24*60 - DateTime.Now.TimeOfDay.TotalMinutes) / quoeficient;
+
+                //_logger.LogInformation($"usedQuota: {usedQuota}\navailQuota: {availQuota}\ninterval: {interval}\ncount: {canais.Count}\nTimeOfDay: {DateTime.Now.TimeOfDay.TotalMinutes}\nquoeficient: {quoeficient}");
+
                 var ultimaBusca = canal.UltimaBusca ?? DateTime.MinValue;
-                if ((DateTime.Now - ultimaBusca).TotalHours >= 8)
+                if ((DateTime.Now - ultimaBusca).TotalMinutes >= interval && availQuota > 0)
                 {
 
                     // SEMPRE BUSCAR A PARTIR DAS 0:00 DO DIA ANTERIOR AO ÚLTIMO VÍDEO
