@@ -133,9 +133,9 @@ button.close {
     color: white;
 }
 
-    button.close:hover {
-        color: white !important;
-    }
+button.close:hover {
+    color: white !important;
+}
 
 .modal-footer {
     height: 250px;
@@ -159,5 +159,4 @@ h5 {
     height: 100%;
     width: 0;
     background-color: red;
-
 }
