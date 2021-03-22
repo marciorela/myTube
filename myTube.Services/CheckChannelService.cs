@@ -35,9 +35,9 @@ namespace myTube.Services
                 var canaisValidar = await _canalRepository.GetByStatus(EStatusCanal.Validar);
                 await ValidarCanais(canaisValidar);
 
-                _logger.LogInformation("Validando canais com erro de quota...");
-                var canaisQuota = await _canalRepository.GetByStatus(EStatusCanal.QuotaExceeded);
-                await ValidarCanais(canaisQuota);
+                //_logger.LogInformation("Validando canais com erro de quota...");
+                //var canaisQuota = await _canalRepository.GetByStatus(EStatusCanal.QuotaExceeded);
+                //await ValidarCanais(canaisQuota);
             }
             catch
             {

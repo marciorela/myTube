@@ -40,7 +40,7 @@ namespace myTube.WS
                 try
                 {
                     // SOMENTE ENTRE 07:00 E 23:59
-                    if (DateTime.Now.Hour >= 7)
+                    if (DateTime.Now.Hour >= 0) //7)
                     {
 
                         _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);

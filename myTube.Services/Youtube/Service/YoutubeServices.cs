@@ -3,6 +3,7 @@ using Google.Apis.YouTube.v3;
 using Google.Apis.YouTube.v3.Data;
 using Microsoft.Extensions.Logging;
 using myTube.Data.Repositories;
+using myTube.Services.XML;
 using myTube.Services.Youtube.Model;
 using System;
 using System.Collections.Generic;
@@ -24,6 +25,78 @@ namespace myTube.Services.Youtube
         }
 
         public async Task<(List<YoutubeMovie>, int)> GetVideosByChannelId(string apiKey, string channelId, DateTime publishedAfter)
+        {
+            var (videos, cost) = await GetVideosByChannelIdUsingFeed(apiKey, channelId, publishedAfter);
+            //var (videos, cost) = await GetVideosByChannelIdUsingApi(apiKey, channelId, publishedAfter);
+
+            if (cost > 0)
+            {
+                await _youtubeLogRepository.Add("GetVideosByChannelId", cost);
+            }
+
+            return (videos, cost);
+
+        }
+
+        private async Task<(List<YoutubeMovie>, int)> GetVideosByChannelIdUsingFeed(string apiKey, string channelId, DateTime publishedAfter)
+        {
+            var result = new List<YoutubeMovie>();
+
+            var cost = 0;
+            var listIds = new List<string>();
+            var feedList = await GetVideosByFeed(channelId, publishedAfter);
+            foreach(var feed in feedList)
+            {
+                if (feed.PublishedAt >= publishedAfter)
+                {
+                    result.Add(new YoutubeMovie()
+                    {
+                        Id = feed.VideoId,
+                        ChannelId = feed.ChannelId,
+                        PublishedAt = feed.PublishedAt
+                    });
+                    listIds.Add(feed.VideoId);
+                }
+
+                if (listIds.Count >= 40)
+                {
+                    cost += await GetExtraVideosInformation(apiKey, string.Join(",", listIds), result);
+                    listIds.Clear();
+                }
+            }
+
+            if (listIds.Count > 0)
+            {
+                cost += await GetExtraVideosInformation(apiKey, string.Join(",", listIds), result);
+            }
+
+            return (result, cost);
+        }
+
+        private async Task<List<Entry>> GetVideosByFeed(string channelId, DateTime publishedAfter)
+        { 
+            return await Task.Run(() =>
+            {
+                var items = new List<Entry>();
+                var url = "https://www.youtube.com/feeds/videos.xml?channel_id=" + channelId;
+                //var url = @"\\192.168.1.101\downloads\videos.xml";
+
+                var tags = new ReadTagsXML(url, new List<Type>
+                        {
+                            typeof(Entry)
+                        });
+
+                (object obj, string xml) tagRead;
+                while ((tagRead = tags.ReadNextTag()).obj != null)
+                {
+                    items.Add((Entry)tagRead.obj);
+                }
+
+                return items;
+            });
+        }
+
+        private async Task<(List<YoutubeMovie>, int)> GetVideosByChannelIdUsingApi(string apiKey, string channelId, DateTime publishedAfter)
         {
             var result = new List<YoutubeMovie>();
 
@@ -56,8 +129,6 @@ namespace myTube.Services.Youtube
             {
                 cost += await GetExtraVideosInformation(apiKey, string.Join(",", listIds), result);
             }
-
-            await _youtubeLogRepository.Add("GetVideosByChannelId", cost);
 
             return (result, cost);
         }
@@ -129,6 +200,13 @@ namespace myTube.Services.Youtube
                     {
                         videoInList.Description = video.Snippet.Description;
                         videoInList.DurationSecs = YoutubeTimeToSecs(video.ContentDetails.Duration);
+                        videoInList.Title = video.Snippet.Title;
+                        videoInList.ETag = video.Snippet.ETag;
+                        videoInList.Summary = video.Snippet.Description;
+
+                        videoInList.ThumbnailMinUrl = video.Snippet.Thumbnails.Default__.Url.Replace("_live", "");
+                        videoInList.ThumbnailMediumUrl = video.Snippet.Thumbnails.Medium.Url.Replace("_live", "");
+                        videoInList.ThumbnailMaxUrl = video.Snippet.Thumbnails.High.Url.Replace("_live", "");
 
                         if (video.LiveStreamingDetails != null)
                         {
@@ -202,7 +280,7 @@ namespace myTube.Services.Youtube
 
                         nextpagetoken = searchListResponse.NextPageToken;
                     }
-                    catch 
+                    catch
                     {
                         throw;
                     }
