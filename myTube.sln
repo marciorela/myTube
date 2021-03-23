@@ -3,17 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31005.135
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "myTube", "myTube\myTube.csproj", "{4660E1E3-EAD8-432C-A279-B672DC7DDAC2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "myTube", "myTube\myTube.csproj", "{4660E1E3-EAD8-432C-A279-B672DC7DDAC2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "myTube.Data", "myTube.Data\myTube.Data.csproj", "{FBD69E36-D730-4D65-A39E-D65CA9D56A91}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "myTube.Data", "myTube.Data\myTube.Data.csproj", "{FBD69E36-D730-4D65-A39E-D65CA9D56A91}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "myTube.Domain", "myTube.Domain\myTube.Domain.csproj", "{A6434D97-C5BE-4967-9529-71AE7AEFAA68}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "myTube.Domain", "myTube.Domain\myTube.Domain.csproj", "{A6434D97-C5BE-4967-9529-71AE7AEFAA68}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "myTube.WS", "myTube.WS\myTube.WS.csproj", "{812BE111-B044-4BD4-892D-1BD055DCD94A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "myTube.WS", "myTube.WS\myTube.WS.csproj", "{812BE111-B044-4BD4-892D-1BD055DCD94A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "myTube.Services", "myTube.Services\myTube.Services.csproj", "{B2EB2E66-2895-4FA2-A881-6B8F45A22732}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "myTube.Services", "myTube.Services\myTube.Services.csproj", "{B2EB2E66-2895-4FA2-A881-6B8F45A22732}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MR.String", "..\lib\MR.Utils\MR.String\MR.String.csproj", "{E8D0DFDC-DA62-425A-9E08-20C0391C7657}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MR.Log", "..\lib\MR.Utils\MR.Log\MR.Log.csproj", "{67D09BB3-63DF-402D-ACB0-60659B5290F0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{E8D0DFDC-DA62-425A-9E08-20C0391C7657}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E8D0DFDC-DA62-425A-9E08-20C0391C7657}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E8D0DFDC-DA62-425A-9E08-20C0391C7657}.Release|Any CPU.Build.0 = Release|Any CPU
+		{67D09BB3-63DF-402D-ACB0-60659B5290F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67D09BB3-63DF-402D-ACB0-60659B5290F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{67D09BB3-63DF-402D-ACB0-60659B5290F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{67D09BB3-63DF-402D-ACB0-60659B5290F0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

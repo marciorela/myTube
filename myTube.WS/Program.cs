@@ -1,5 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using MR.Log;
 using myTube.Data;
 using myTube.Data.Repositories;
 using myTube.Services;
@@ -15,12 +16,22 @@ namespace myTube.WS
     {
         public static void Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
+            MRLog.ConfigureLogMain();
+
+            try
+            {
+                CreateHostBuilder(args).Build().Run();
+            }
+            finally
+            {
+                MRLog.CloseAndFlush();
+            }
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
                 .UseWindowsService()
+                .MRConfigureLogService()
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddTransient<AppDbContext>();

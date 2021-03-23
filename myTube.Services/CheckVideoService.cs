@@ -73,6 +73,8 @@ namespace myTube.Services
             var ultimaBusca = canal.UltimaBusca ?? DateTime.MinValue;
             if ((DateTime.Now - ultimaBusca).TotalMinutes >= 60 && usedQuota < 9900)
             {
+                _logger.LogInformation("Verificando canal '{canal}'. Quota: {usedQuota}", canal.Title, usedQuota);
+
                 var publishedAfter = canal.UltimoVideo?.AddSeconds(1) ?? canal.PrimeiraBusca;
                 var maxData = canal.UltimoVideo;
                 var (videos, cost) = await _youTubeServices.GetVideosByChannelId(canal.Usuario.ApiKey, canal.YoutubeCanalId, publishedAfter); // GetVideosByChannel(canal);

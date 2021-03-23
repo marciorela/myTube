@@ -26,6 +26,15 @@ namespace myTube.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> Index()
+        {
+            var videos = (await _videoRepository.GetByStatus(_usuarioService.Id, EStatusVideo.NaoAssistido))
+                .Where(v => DateTime.Now >= (v.ScheduledStartTime ?? DateTime.Now).AddHours(-1));
+
+            return View(videos);
+        }
+
+        [HttpGet]
         public async Task<IActionResult> PlayVideo(Guid id)
         {
             var video = await _videoRepository.GetById(id);
@@ -39,14 +48,6 @@ namespace myTube.Controllers
             await _videoRepository.SetProgress(id, progress);
 
             return Ok();
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> Index()
-        {
-            var videos = await _videoRepository.GetByStatus(_usuarioService.Id, EStatusVideo.NaoAssistido);
-
-            return View(videos);
         }
 
         [HttpGet]

@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\lib\MR.Utils\MR.Log\MR.Log.csproj" />
     <ProjectReference Include="..\myTube.Data\myTube.Data.csproj" />
     <ProjectReference Include="..\myTube.Domain\myTube.Domain.csproj" />
     <ProjectReference Include="..\myTube.Services\myTube.Services.csproj" />
