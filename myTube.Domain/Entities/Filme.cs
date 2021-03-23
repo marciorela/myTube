@@ -46,7 +46,8 @@ namespace myTube.Domain.Entities
         [Required]
         public EStatusVideo Status { get; set; } = EStatusVideo.NaoAssistido;
 
-        
+        public double WatchedSecs { get; set; } = 0;
+
         // FK
         public Guid CanalId { get; set; }
         public virtual Canal Canal { get; set; }

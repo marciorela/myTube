@@ -39,6 +39,19 @@ namespace myTube.Data.Repositories
                 .FirstOrDefaultAsync();
         }
 
+        public async Task SetProgress(Guid id, double progress)
+        {
+            var video = new Filme()
+            {
+                Id = id,
+                WatchedSecs = progress
+            };
+
+            _ctx.Filmes.Attach(video);
+            _ctx.Entry(video).Property(p => p.WatchedSecs).IsModified = true;
+            await _ctx.SaveChangesAsync();
+        }
+
         public async Task<IEnumerable<Filme>> GetByStatus(Guid usuarioId, EStatusVideo status)
         {
             return await _ctx.Filmes

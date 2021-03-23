@@ -101,7 +101,7 @@
     //    The function indicates that when playing a video (state=1),
     //    the player should play for six seconds and then stop.
     var mytimer;
-    var saveProgress;
+    var update;
     function onPlayerStateChange(event) {
         if (event.data == YT.PlayerState.PLAYING) {
 
@@ -114,9 +114,13 @@
 
                 progress(playerTimeDifference, $('#progressBar'));
             }, 1000);
-        } else {
 
+            update = setInterval(function () {
+                saveProgress('@Model.Id', parseInt(player.getCurrentTime(), 10))
+            }, 3000);
+        } else {
             clearTimeout(mytimer);
+            clearTimeout(update);
             //$('#progressBar').hide();
         }
     }

@@ -34,6 +34,14 @@ namespace myTube.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> Progress(Guid id, double progress)
+        {
+            await _videoRepository.SetProgress(id, progress);
+
+            return Ok();
+        }
+
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
             var videos = await _videoRepository.GetByStatus(_usuarioService.Id, EStatusVideo.NaoAssistido);

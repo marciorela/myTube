@@ -61,6 +61,19 @@ function setAssistirDepois(id, nome) {
 
     $.ajax(params)
 }
+
+function saveProgress(id, progress) {
+    let params = {
+        url: `/video/progress?id=${id}&progress=${progress}`,
+        method: 'get',
+        success: () => { },
+        error: (resp) => { },
+        complete: () => { }
+    };
+
+    $.ajax(params)
+}
+
 function setConsole(id, nome) {
     console.log('Somente para teste')
 
