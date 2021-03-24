@@ -18,8 +18,6 @@ namespace myTube.Data
         public DbSet<Filme> Filmes { get; set; }
         public DbSet<LogYoutube> LogYoutube { get; set; }
 
-        public bool InUse { get; set; } = false;
-
         public AppDbContext(IConfiguration config)
         {
             _config = config;

@@ -82,14 +82,21 @@
     font-weight: 500;
 }
 
-a {
+.title a {
     text-decoration: none;
     color: white !important;
 }
 
 .buttons {
     min-width: 210px;
-    /* text-align: right; */
+}
+
+.buttons a:hover {
+    text-decoration: none;
+}
+
+.buttons-right {
+    text-align: right; 
 }
 
 .speed-button {

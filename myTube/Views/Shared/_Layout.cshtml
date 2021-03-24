@@ -17,7 +17,7 @@
 <body>
 
     <header>
-      <nav class="navbar navbar-expand-sm navbar-dark fixed-top navbar-toggleable-sm border-bottom box-shadow mb-5">
+        <nav class="navbar navbar-expand-sm navbar-dark fixed-top navbar-toggleable-sm border-bottom box-shadow mb-5">
             <div class="container-fluid">
                 <img src="~/img/myTube-32x32.png" width="32" />
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">myTube</a>
@@ -26,17 +26,18 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-white-50" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white-50" asp-area="" asp-controller="Canal" asp-action="Index">Canais</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white-50" asp-area="" asp-controller="Video" asp-action="Index">Videos []</a>
-                        </li>
-                    </ul>
+
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <ul class="navbar-nav flex-grow-1">
+                            <li class="nav-item">
+                                <a class="nav-link text-white-50" asp-area="" asp-controller="Canal" asp-action="Index">Canais</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white-50" asp-area="" asp-controller="Video" asp-action="Index">Videos <sup><span id="naoassistido" class="badge badge-pill badge-info">@await Component.InvokeAsync("HeaderInfo")</span></sup></a>
+                            </li>
+                        </ul>
+                    }
                 </div>
             </div>
         </nav>

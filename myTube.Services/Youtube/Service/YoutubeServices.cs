@@ -16,12 +16,12 @@ namespace myTube.Services.Youtube
     public class YoutubeServices
     {
         private readonly ILogger<YoutubeServices> _logger;
-        private readonly LogYoutubeRepository _youtubeLogRepository;
+        private readonly LogYoutubeRepository _logYoutubeRepository;
 
-        public YoutubeServices(ILogger<YoutubeServices> logger, LogYoutubeRepository youtubeLogRepository)
+        public YoutubeServices(ILogger<YoutubeServices> logger, LogYoutubeRepository logYoutubeRepository)
         {
             _logger = logger;
-            _youtubeLogRepository = youtubeLogRepository;
+            _logYoutubeRepository = logYoutubeRepository;
         }
 
         public async Task<(List<YoutubeMovie>, int)> GetVideosByChannelId(string apiKey, string channelId, DateTime publishedAfter)
@@ -31,7 +31,7 @@ namespace myTube.Services.Youtube
 
             if (cost > 0)
             {
-                await _youtubeLogRepository.Add("GetVideosByChannelId", cost);
+                await _logYoutubeRepository.Add("GetVideosByChannelId", cost);
             }
 
             return (videos, cost);
@@ -44,7 +44,7 @@ namespace myTube.Services.Youtube
 
             var cost = 0;
             var listIds = new List<string>();
-            var feedList = await GetVideosByFeed(channelId, publishedAfter);
+            var feedList = await GetVideosByFeed(channelId);
             foreach(var feed in feedList)
             {
                 if (feed.PublishedAt >= publishedAfter)
@@ -73,7 +73,7 @@ namespace myTube.Services.Youtube
             return (result, cost);
         }
 
-        private async Task<List<Entry>> GetVideosByFeed(string channelId, DateTime publishedAfter)
+        private async Task<List<Entry>> GetVideosByFeed(string channelId)
         { 
             return await Task.Run(() =>
             {
@@ -182,7 +182,7 @@ namespace myTube.Services.Youtube
 
                 }
 
-                await _youtubeLogRepository.Add("GetChannelInfo", cost);
+                await _logYoutubeRepository.Add("GetChannelInfo", cost);
 
                 return (ret, cost);
             });

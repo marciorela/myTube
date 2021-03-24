@@ -28,8 +28,7 @@ namespace myTube.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var videos = (await _videoRepository.GetByStatus(_usuarioService.Id, EStatusVideo.NaoAssistido))
-                .Where(v => DateTime.Now >= (v.ScheduledStartTime ?? DateTime.Now).AddHours(-1));
+            var videos = await _videoRepository.GetListIndex(_usuarioService.Id);
 
             return View(videos);
         }

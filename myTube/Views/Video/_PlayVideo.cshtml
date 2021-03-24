@@ -16,6 +16,7 @@
                             <button class="icon icon-blue far fa-clock" data-dismiss="modal" onclick="setAssistirDepois('@Model.Id', '@Model.Title')"></button>
                             <button class="icon icon-yellow far fa-star" data-dismiss="modal" onclick="setFavorito('@Model.Id', '@Model.Title')"></button>
                             <button class="icon icon-red far fa-minus-square" data-dismiss="modal" onclick="setIgnorado('@Model.Id', '@Model.Title')"></button>
+                            <a class="icon icon-red fab fa-youtube" href="https://www.youtube.com/watch?v=@Model.YoutubeFilmeId"></a>
                             @*                            <button class="icon icon-red far fa-question-circle" data-dismiss="modal" onclick="setConsole('@Model.Id', '@Model.Title')"></button>*@
 
                         </div>
@@ -63,7 +64,8 @@
         width: 1280,
         height: 960,
         playerVars: {
-            'controls': 1
+            'controls': 1,
+            'start': @Model.WatchedSecs
         },
         events: {
             'onReady': onPlayerReady,

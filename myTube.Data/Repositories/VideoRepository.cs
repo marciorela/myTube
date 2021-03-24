@@ -30,6 +30,14 @@ namespace myTube.Data.Repositories
             await _ctx.SaveChangesAsync();
         }
 
+        public async Task<IEnumerable<Filme>> GetListIndex(Guid usuarioId)
+        {
+            // SE ALGUM VÍDEO TIVER SCHEDULEDSTART, ELE SÓ DEVERÁ APARECER QUANDO FALTAR UMA HORA PARA O INÍCIO
+            return (await GetByStatus(usuarioId, EStatusVideo.NaoAssistido))
+                .Where(v => DateTime.Now >= (v.ScheduledStartTime ?? DateTime.Now).AddHours(-1))
+                .ToList();
+        }
+
         public async Task<Filme> GetById(Guid id)
         {
             return await _ctx.Filmes

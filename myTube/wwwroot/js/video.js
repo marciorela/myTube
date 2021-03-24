@@ -3,6 +3,7 @@
         url: `/video/assistido/${id}`,
         method: 'get',
         success: () => {
+            badgeMinus();
             toastr.success('Video marcado como Assistido', `${nome}`);
             $(`#item-${id}`).fadeOut('slow', () => $(this).remove());
             $(`#item-${id}`).remove();
@@ -19,6 +20,7 @@ function setIgnorado(id, nome) {
         url: `/video/ignorado/${id}`,
         method: 'get',
         success: () => {
+            badgeMinus();
             toastr.warning('Video marcado como Ignorado', `${nome}`);
             $(`#item-${id}`).fadeOut('slow', () => $(this).remove());
             $(`#item-${id}`).remove();
@@ -35,6 +37,7 @@ function setFavorito(id, nome) {
         url: `/video/favorito/${id}`,
         method: 'get',
         success: () => {
+            badgeMinus();
             toastr.warning('Video marcado como Favorito', `${nome}`);
             $(`#item-${id}`).fadeOut('slow', () => $(this).remove());
             $(`#item-${id}`).remove();
@@ -51,6 +54,7 @@ function setAssistirDepois(id, nome) {
         url: `/video/AssistirDepois/${id}`,
         method: 'get',
         success: () => {
+            badgeMinus();
             toastr.info('Video marcado como Assistir Depois', `${nome}`);
             $(`#item-${id}`).fadeOut('slow', () => $(this).remove());
             $(`#item-${id}`).remove();
@@ -72,6 +76,10 @@ function saveProgress(id, progress) {
     };
 
     $.ajax(params)
+}
+
+function badgeMinus() {
+    document.querySelector('#naoassistido').innerHTML = document.querySelector('#naoassistido').innerHTML - 1;
 }
 
 function setConsole(id, nome) {
