@@ -6,6 +6,7 @@ using myTube.Services.Youtube;
 using myTube.Services.Youtube.Model;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -77,7 +78,9 @@ namespace myTube.Services
 
                 var publishedAfter = canal.UltimoVideo?.AddSeconds(1) ?? canal.PrimeiraBusca;
                 var maxData = canal.UltimoVideo;
-                var (videos, cost) = await _youTubeServices.GetVideosByChannelId(canal.Usuario.ApiKey, canal.YoutubeCanalId, publishedAfter); // GetVideosByChannel(canal);
+                var (videos, cost) = await _youTubeServices.GetVideosByChannelId(canal.Usuario.ApiKey, canal.UsuarioId, canal.YoutubeCanalId, publishedAfter);
+                
+                _logger.LogInformation("Videos encontrados: {videos}", videos.Count);
                 foreach (var video in videos)
                 {
 
@@ -218,7 +221,7 @@ namespace myTube.Services
 
         public DateTime PublishedAt {
             get {
-                return DateTime.Parse(Published);
+                return DateTime.Parse(Published, CultureInfo.InvariantCulture);
             }
         }
     }

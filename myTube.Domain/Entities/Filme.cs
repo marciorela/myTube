@@ -51,5 +51,6 @@ namespace myTube.Domain.Entities
         // FK
         public Guid CanalId { get; set; }
         public virtual Canal Canal { get; set; }
+
     }
 }

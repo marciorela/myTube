@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MR.String;
+using myTube.Domain.Entities;
 
 namespace myTube.Controllers
 {
@@ -29,6 +30,10 @@ namespace myTube.Controllers
         public async Task<IActionResult> Index()
         {
             var videos = await _videoRepository.GetListIndex(_usuarioService.Id);
+            foreach (var video in videos)
+            {
+                video.WatchedSecs = video.WatchedSecs > 30 ? Math.Max(video.WatchedSecs - 15, 0) : 0;
+            }
 
             return View(videos);
         }

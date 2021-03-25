@@ -16,17 +16,21 @@ namespace myTube.Services.Youtube
     public class YoutubeServices
     {
         private readonly ILogger<YoutubeServices> _logger;
+        private readonly VideoRepository _videoRepository;
         private readonly LogYoutubeRepository _logYoutubeRepository;
 
-        public YoutubeServices(ILogger<YoutubeServices> logger, LogYoutubeRepository logYoutubeRepository)
+        public YoutubeServices(ILogger<YoutubeServices> logger,
+            VideoRepository videoRepository,
+            LogYoutubeRepository logYoutubeRepository)
         {
             _logger = logger;
+            _videoRepository = videoRepository;
             _logYoutubeRepository = logYoutubeRepository;
         }
 
-        public async Task<(List<YoutubeMovie>, int)> GetVideosByChannelId(string apiKey, string channelId, DateTime publishedAfter)
+        public async Task<(List<YoutubeMovie>, int)> GetVideosByChannelId(string apiKey, Guid usuarioId, string channelId, DateTime publishedAfter)
         {
-            var (videos, cost) = await GetVideosByChannelIdUsingFeed(apiKey, channelId, publishedAfter);
+            var (videos, cost) = await GetVideosByChannelIdUsingFeed(apiKey, usuarioId, channelId, publishedAfter);
             //var (videos, cost) = await GetVideosByChannelIdUsingApi(apiKey, channelId, publishedAfter);
 
             if (cost > 0)
@@ -38,7 +42,7 @@ namespace myTube.Services.Youtube
 
         }
 
-        private async Task<(List<YoutubeMovie>, int)> GetVideosByChannelIdUsingFeed(string apiKey, string channelId, DateTime publishedAfter)
+        private async Task<(List<YoutubeMovie>, int)> GetVideosByChannelIdUsingFeed(string apiKey, Guid usuarioId, string channelId, DateTime publishedAfter)
         {
             var result = new List<YoutubeMovie>();
 
@@ -47,15 +51,20 @@ namespace myTube.Services.Youtube
             var feedList = await GetVideosByFeed(channelId);
             foreach(var feed in feedList)
             {
+
                 if (feed.PublishedAt >= publishedAfter)
                 {
-                    result.Add(new YoutubeMovie()
+                    var videoDB = await _videoRepository.GetByYoutubeId(feed.VideoId, usuarioId);
+                    if (videoDB == null)
                     {
-                        Id = feed.VideoId,
-                        ChannelId = feed.ChannelId,
-                        PublishedAt = feed.PublishedAt
-                    });
-                    listIds.Add(feed.VideoId);
+                        result.Add(new YoutubeMovie()
+                        {
+                            Id = feed.VideoId,
+                            ChannelId = feed.ChannelId,
+                            PublishedAt = feed.PublishedAt
+                        });
+                        listIds.Add(feed.VideoId);
+                    }
                 }
 
                 if (listIds.Count >= 40)
