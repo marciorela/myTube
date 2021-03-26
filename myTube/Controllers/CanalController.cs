@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using MR.String;
 using myTube.Data.Repositories;
 using myTube.Domain.Entities;
 using myTube.Domain.Enums;
@@ -45,7 +47,27 @@ namespace myTube.Controllers
         // GET: CanalController/Create
         public ActionResult Create()
         {
-            return View();
+            var values = Enum.GetValues(typeof(ESource));
+            var items = new List<SelectListItem>(values.Length);
+            
+            foreach (var value in values)
+            {
+                items.Add(new SelectListItem
+                {
+                    //Text = ((ESource)value).GetDescription(),
+                    Text = value.ToString(),
+                    Value = ((int)value).ToString()
+                });
+            }
+
+            ViewBag.SourceItems = items;
+            var canal = new Canal
+            {
+                PrimeiraBusca = DateTime.Now.AddDays(-30),
+                Source = ESource.Canal
+            };
+
+            return View(canal);
         }
 
         // POST: CanalController/Create

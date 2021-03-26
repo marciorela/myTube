@@ -6,7 +6,7 @@
 
 <h1>Create</h1>
 
-<h4>Canal</h4>
+<h4>Fonte de Vídeos</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -16,6 +16,12 @@
                 <label asp-for="YoutubeCanalId" class="control-label"></label>
                 <input asp-for="YoutubeCanalId" class="form-control" autofocus/>
                 <span asp-validation-for="YoutubeCanalId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Source" class="control-label"></label>
+                <select asp-items="@ViewBag.SourceItems" name="Source" class="form-control"></select>
+                @*<input asp-for="Source" class="form-control" autofocus />*@
+                <span asp-validation-for="Source" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="PrimeiraBusca" class="control-label"></label>

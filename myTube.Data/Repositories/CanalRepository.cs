@@ -25,10 +25,10 @@ namespace myTube.Data.Repositories
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<Canal>> GetByStatus(EStatusCanal status)
+        public async Task<IEnumerable<Canal>> GetByStatus(EStatusCanal status, ESource source)
         {
             return await _ctx.Canais
-                .Where(c => c.Status == status)
+                .Where(c => c.Status == status && c.Source == source)
                 .Include(u => u.Usuario)
                 .ToListAsync();
         }

@@ -31,9 +31,13 @@ namespace myTube.Services
         {
             try
             {
-                _logger.LogInformation("Validando novos canais...");
-                var canaisValidar = await _canalRepository.GetByStatus(EStatusCanal.Validar);
+                _logger.LogInformation("Validando canais...");
+                var canaisValidar = await _canalRepository.GetByStatus(EStatusCanal.Validar, ESource.Canal);
                 await ValidarCanais(canaisValidar);
+
+                _logger.LogInformation("Validando playlists...");
+                var playlistsValidar = await _canalRepository.GetByStatus(EStatusCanal.Validar, ESource.Playlist);
+                await ValidarPlaylists(playlistsValidar);
 
                 //_logger.LogInformation("Validando canais com erro de quota...");
                 //var canaisQuota = await _canalRepository.GetByStatus(EStatusCanal.QuotaExceeded);
@@ -52,8 +56,8 @@ namespace myTube.Services
             {
                 try
                 {
-                    var (info, cost) = await _youTubeServices.GetChannelInfo(canal.Usuario.ApiKey, canal.YoutubeCanalId);
 
+                    var (info, cost) = await _youTubeServices.GetChannelInfo(canal.Usuario.ApiKey, canal.YoutubeCanalId);
                     if (info != null)
                     {
                         canal.CustomUrl = info.CustomUrl;
@@ -83,6 +87,39 @@ namespace myTube.Services
                         await _canalRepository.SetSituacao(canal, EStatusCanal.Erro, e);
                         throw;
                     }
+                }
+            }
+        }
+
+        private async Task ValidarPlaylists(IEnumerable<Canal> playlists)
+        {
+            foreach (var playlist in playlists)
+            {
+                try
+                {
+                    var (info, cost) = await _youTubeServices.GetPlaylistInfo(playlist.Usuario.ApiKey, playlist.YoutubeCanalId);
+                    if (info != null)
+                    {
+                        playlist.CustomUrl = info.CustomUrl;
+                        playlist.Description = info.Description;
+                        playlist.PublishedAt = info.PublishedAt;
+                        playlist.ThumbnailMinUrl = info.ThumbnailMinUrl;
+                        playlist.ThumbnailMediumUrl = info.ThumbnailMediumUrl;
+                        playlist.ThumbnailMaxUrl = info.ThumbnailMaxUrl;
+                        playlist.Title = info.Title;
+                        playlist.Status = EStatusCanal.Ativo;
+                    }
+                    else
+                    {
+                        playlist.Status = EStatusCanal.CanalNaoExiste;
+                    }
+
+                    await _canalRepository.Update(playlist);
+                }
+                catch (Exception e)
+                {
+                    await _canalRepository.SetSituacao(playlist, EStatusCanal.Erro, e);
+                    throw;
                 }
             }
 

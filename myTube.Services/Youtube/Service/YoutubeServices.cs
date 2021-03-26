@@ -3,6 +3,7 @@ using Google.Apis.YouTube.v3;
 using Google.Apis.YouTube.v3.Data;
 using Microsoft.Extensions.Logging;
 using myTube.Data.Repositories;
+using myTube.Domain.Enums;
 using myTube.Services.XML;
 using myTube.Services.Youtube.Model;
 using System;
@@ -28,9 +29,9 @@ namespace myTube.Services.Youtube
             _logYoutubeRepository = logYoutubeRepository;
         }
 
-        public async Task<(List<YoutubeMovie>, int)> GetVideosByChannelId(string apiKey, Guid usuarioId, string channelId, DateTime publishedAfter)
+        public async Task<(List<YoutubeMovie>, int)> GetVideosByChannelId(string apiKey, Guid usuarioId, string channelId, ESource source, DateTime publishedAfter)
         {
-            var (videos, cost) = await GetVideosByChannelIdUsingFeed(apiKey, usuarioId, channelId, publishedAfter);
+            var (videos, cost) = await GetVideosByChannelIdUsingFeed(apiKey, usuarioId, channelId, source, publishedAfter);
             //var (videos, cost) = await GetVideosByChannelIdUsingApi(apiKey, channelId, publishedAfter);
 
             if (cost > 0)
@@ -42,14 +43,14 @@ namespace myTube.Services.Youtube
 
         }
 
-        private async Task<(List<YoutubeMovie>, int)> GetVideosByChannelIdUsingFeed(string apiKey, Guid usuarioId, string channelId, DateTime publishedAfter)
+        private async Task<(List<YoutubeMovie>, int)> GetVideosByChannelIdUsingFeed(string apiKey, Guid usuarioId, string channelId, ESource source, DateTime publishedAfter)
         {
             var result = new List<YoutubeMovie>();
 
             var cost = 0;
             var listIds = new List<string>();
-            var feedList = await GetVideosByFeed(channelId);
-            foreach(var feed in feedList)
+            var feedList = await GetVideosByFeed(channelId, source);
+            foreach (var feed in feedList)
             {
 
                 if (feed.PublishedAt >= publishedAfter)
@@ -82,12 +83,18 @@ namespace myTube.Services.Youtube
             return (result, cost);
         }
 
-        private async Task<List<Entry>> GetVideosByFeed(string channelId)
-        { 
+        private async Task<List<Entry>> GetVideosByFeed(string channelId, ESource source)
+        {
             return await Task.Run(() =>
             {
                 var items = new List<Entry>();
-                var url = "https://www.youtube.com/feeds/videos.xml?channel_id=" + channelId;
+
+                var url = "";
+                if (source == ESource.Canal)
+                    url = "https://www.youtube.com/feeds/videos.xml?channel_id=" + channelId;
+                else if (source == ESource.Playlist)
+                    url = "https://www.youtube.com/feeds/videos.xml?playlist_id=" + channelId;
+
                 //var url = @"\\192.168.1.101\downloads\videos.xml";
 
                 var tags = new ReadTagsXML(url, new List<Type>
@@ -175,6 +182,57 @@ namespace myTube.Services.Youtube
                         ret = new YoutubeChannel()
                         {
                             CustomUrl = searchListResponse.Items[0].Snippet.CustomUrl,
+                            Description = searchListResponse.Items[0].Snippet.Description,
+                            PublishedAt = (DateTime)searchListResponse.Items[0].Snippet.PublishedAt,
+                            ThumbnailMinUrl = searchListResponse.Items[0].Snippet.Thumbnails.Default__.Url.Replace("_live", ""),
+                            ThumbnailMediumUrl = searchListResponse.Items[0].Snippet.Thumbnails.Medium.Url.Replace("_live", ""),
+                            ThumbnailMaxUrl = searchListResponse.Items[0].Snippet.Thumbnails.High.Url.Replace("_live", ""),
+                            Title = searchListResponse.Items[0].Snippet.Title,
+                            ETag = searchListResponse.Items[0].Snippet.ETag,
+                            Id = searchListResponse.Items[0].Id
+                        };
+                    }
+                }
+                catch
+                {
+
+                }
+
+                await _logYoutubeRepository.Add("GetChannelInfo", cost);
+
+                return (ret, cost);
+            });
+        }
+
+        public async Task<(YoutubeChannel, int)> GetPlaylistInfo(string apiKey, string youtubePlaylistId)
+        {
+            return await Task.Run(async () =>
+            {
+                YoutubeChannel ret = null;
+                var cost = 0;
+
+                var _youtubeService = new YouTubeService(new BaseClientService.Initializer()
+                {
+                    ApiKey = apiKey,
+                    ApplicationName = "Videopedia"//this.GetType().ToString()
+                });
+
+                var searchListRequest = _youtubeService.Playlists.List("snippet");
+                searchListRequest.Id = youtubePlaylistId;
+                searchListRequest.MaxResults = 50;
+                //searchListRequest.MySubscribers = true;
+                searchListRequest.PageToken = " ";
+
+                try
+                {
+                    // Call the search.list method to retrieve results matching the specified query term.
+                    var searchListResponse = searchListRequest.Execute();
+                    cost += 1;
+
+                    if (searchListResponse.Items != null && searchListResponse.Items.Count > 0)
+                    {
+                        ret = new YoutubeChannel()
+                        {
                             Description = searchListResponse.Items[0].Snippet.Description,
                             PublishedAt = (DateTime)searchListResponse.Items[0].Snippet.PublishedAt,
                             ThumbnailMinUrl = searchListResponse.Items[0].Snippet.Thumbnails.Default__.Url.Replace("_live", ""),

@@ -26,6 +26,8 @@ namespace myTube.Domain.Entities
         [DataType(DataType.Date)]
         public DateTime PrimeiraBusca  { get; set; }
 
+        [Required]
+        public ESource Source { get; set; } = ESource.Canal;
 
         // READ-ONLY - INFORMAÇÕES CONSULTADAS NA API
         [StringLength(50)]

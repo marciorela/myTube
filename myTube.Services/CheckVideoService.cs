@@ -69,16 +69,15 @@ namespace myTube.Services
 
         private async Task VideosByChannel(Canal canal)
         {
-
             var usedQuota = await _logYoutubeRepository.GetCost(DateTime.Now);
             var ultimaBusca = canal.UltimaBusca ?? DateTime.MinValue;
             if ((DateTime.Now - ultimaBusca).TotalMinutes >= 60 && usedQuota < 9900)
             {
-                _logger.LogInformation("Verificando canal '{canal}'. Quota: {usedQuota}", canal.Title, usedQuota);
+                _logger.LogInformation("Verificando '{canal}'. Quota: {usedQuota}", canal.Title, usedQuota);
 
                 var publishedAfter = canal.UltimoVideo?.AddSeconds(1) ?? canal.PrimeiraBusca;
                 var maxData = canal.UltimoVideo;
-                var (videos, cost) = await _youTubeServices.GetVideosByChannelId(canal.Usuario.ApiKey, canal.UsuarioId, canal.YoutubeCanalId, publishedAfter);
+                var (videos, cost) = await _youTubeServices.GetVideosByChannelId(canal.Usuario.ApiKey, canal.UsuarioId, canal.YoutubeCanalId, canal.Source, publishedAfter);
                 
                 _logger.LogInformation("Videos encontrados: {videos}", videos.Count);
                 foreach (var video in videos)
