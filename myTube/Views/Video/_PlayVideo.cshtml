@@ -65,7 +65,7 @@
         height: 960,
         playerVars: {
             'controls': 1,
-            'start': @Model.WatchedSecs - 15
+            'start': @Model.WatchedSecs,
         },
         events: {
             'onReady': onPlayerReady,
@@ -104,6 +104,7 @@
     //    the player should play for six seconds and then stop.
     var mytimer;
     var update;
+    var lastCurrentTime = 0;
     function onPlayerStateChange(event) {
         if (event.data == YT.PlayerState.PLAYING) {
 
@@ -114,13 +115,16 @@
                 var playerCurrentTime = player.getCurrentTime();
                 var playerTimeDifference = (playerCurrentTime / playerTotalTime) * 100;
 
+                lastCurrentTime = playerCurrentTime;
                 progress(playerTimeDifference, $('#progressBar'));
             }, 1000);
 
-            update = setInterval(function () {
+            @*update = setInterval(function () {
                 saveProgress('@Model.Id', parseInt(player.getCurrentTime(), 10))
-            }, 3000);
+            }, 3000);*@
         } else {
+            saveProgress('@Model.Id', parseInt(lastCurrentTime, 10));
+
             clearTimeout(mytimer);
             clearTimeout(update);
             //$('#progressBar').hide();

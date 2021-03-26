@@ -84,38 +84,33 @@ namespace myTube.Services
                 foreach (var video in videos)
                 {
 
-                    if (video.PublishedAt >= (canal.UltimoVideo ?? canal.PrimeiraBusca))
+                    var filmeDB = await _filmeRepository.GetByYoutubeId(video.Id, canal.UsuarioId);
+                    if (filmeDB == null)
                     {
-                        var filmeDB = await _filmeRepository.GetByYoutubeId(video.Id, canal.UsuarioId);
-                        if (filmeDB == null)
+                        await _filmeRepository.Add(new Filme()
                         {
-                            await _filmeRepository.Add(new Filme()
-                            {
-                                CanalId = canal.Id,
+                            CanalId = canal.Id,
 
-                                YoutubeFilmeId = video.Id,
-                                DurationSecs = video.DurationSecs,
-                                PublishedAt = video.PublishedAt,
-                                ScheduledStartTime = video.ScheduledStartTime,
-                                Summary = video.Summary,
-                                Description = video.Description,
-                                ThumbnailMaxUrl = video.ThumbnailMaxUrl,
-                                ThumbnailMediumUrl = video.ThumbnailMediumUrl,
-                                ThumbnailMinUrl = video.ThumbnailMinUrl,
-                                Title = video.Title,
-                                ETag = video.ETag ?? ""
-                            });
+                            YoutubeFilmeId = video.Id,
+                            DurationSecs = video.DurationSecs,
+                            PublishedAt = video.PublishedAt,
+                            ScheduledStartTime = video.ScheduledStartTime,
+                            Summary = video.Summary,
+                            Description = video.Description,
+                            ThumbnailMaxUrl = video.ThumbnailMaxUrl,
+                            ThumbnailMediumUrl = video.ThumbnailMediumUrl,
+                            ThumbnailMinUrl = video.ThumbnailMinUrl,
+                            Title = video.Title,
+                            ETag = video.ETag ?? ""
+                        });
 
-                            try
-                            {
-                                maxData ??= video.PublishedAt;
+                        try
+                        {
+                            maxData ??= video.PublishedAt;
 
-                                maxData = new DateTime(Math.Max(((DateTime)maxData).Ticks, ((DateTime)video.PublishedAt).Ticks));
-                            }
-                            catch { }
-
+                            maxData = new DateTime(Math.Max(((DateTime)maxData).Ticks, ((DateTime)video.PublishedAt).Ticks));
                         }
-
+                        catch { }
                     }
                 }
                 await _canalRepository.UpdateUltimaBusca(canal, DateTime.Now, maxData);

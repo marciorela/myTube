@@ -117,7 +117,7 @@
 }
 
 .speed-selected {
-    background-color: white;
+    background-color: var(--btn-speed-selected-background-color);
 }
 
 .modal-dialog iframe {
@@ -133,7 +133,7 @@
 }
 
 .modal-content {
-    background-color: black;
+    background-color: var(--modal-background-color);
 }
 
 button.close {
@@ -165,5 +165,15 @@ h5 {
 #progressBar div {
     height: 100%;
     width: 0;
-    background-color: red;
+    background-color: var(--video-progressbar-background-color);
+}
+
+.button-link {
+    border: none;
+    color: var(--video-link-color);
+    background-color: var(--background-color);
+}
+
+.button-link:focus {
+    outline: none;
 }

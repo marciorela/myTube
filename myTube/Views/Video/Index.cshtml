@@ -11,64 +11,69 @@
     //var linkTo = "https://www.youtube.com/watch?v=" + item.YoutubeFilmeId;
     var duration = new TimeSpan(0, 0, (int)item.DurationSecs);
 
-    <div class="row pb-2" id="item-@item.Id">
+<div class="row pb-2" id="item-@item.Id">
 
-        <div class="col-12">
+    <div class="col-12">
 
-            <div class="d-flex border px-2">
+        <div class="d-flex border px-2">
 
-                <div>
-                    <a href="#" data-toggle="ajax-modal" data-target="#playVideo" data-url="@Url.Action("PlayVideo", "Video", new { id = item.Id })">
-                        <img src="@Html.DisplayFor(modelItem => item.ThumbnailMinUrl)" />
-                    </a>
+            <div>
+                <button button type="button" class="button-link" data-toggle="ajax-modal" data-target="#playVideo" data-url="@Url.Action("PlayVideo", "Video", new { id = item.Id })">
+                    <img src="@Html.DisplayFor(modelItem => item.ThumbnailMinUrl)" />
+                </button>
+                @*<a href="#" data-toggle="ajax-modal" data-target="#playVideo" data-url="@Url.Action("PlayVideo", "Video", new { id = item.Id })">
+                    <img src="@Html.DisplayFor(modelItem => item.ThumbnailMinUrl)" />
+                </a>*@
+            </div>
+
+            <div class="flex-fill d-flex flex-column px-2">
+
+                <div class="title flex-fill">
+                    <button button type="button" class="button-link" data-toggle="ajax-modal" data-target="#playVideo" data-url="@Url.Action("PlayVideo", "Video", new { id = item.Id })">
+                        @item.Title
+                    </button>
+                    @*<a href="#" data-toggle="ajax-modal" data-target="#playVideo" data-url="@Url.Action("PlayVideo", "Video", new { id = item.Id })">
+                    </a>*@
                 </div>
 
-                <div class="flex-fill d-flex flex-column px-2">
+                <div class="d-flex rodape">
 
-                    <div class="title flex-fill">
-                        <a href="#" data-toggle="ajax-modal" data-target="#playVideo" data-url="@Url.Action("PlayVideo", "Video", new { id = item.Id })">
-                            @item.Title
-                        </a>
-                    </div>
+                    <div class="duration-area">
 
-                    <div class="d-flex rodape">
-
-                        <div class="duration-area">
-
-                            @if (item.ScheduledStartTime > DateTime.Now)
+                        @if (item.ScheduledStartTime > DateTime.Now)
                             {
-                                @*MANTIDO PARA FINS DIDATICOS*@
-                                <label class="duration @(item.ScheduledStartTime > DateTime.Now ? "live" : "")">@(((DateTime)item.ScheduledStartTime).ToString("dd/MM/yyyy HH:mm"))</label>
+                        @*MANTIDO PARA FINS DIDATICOS*@
+                        <label class="duration @(item.ScheduledStartTime > DateTime.Now ? "live" : "")">@(((DateTime)item.ScheduledStartTime).ToString("dd/MM/yyyy HH:mm"))</label>
                             }
                             else
                             {
-                                <label class="duration">@duration</label>
+                        <label class="duration">@duration</label>
                             }
-                        </div>
-
-                        <div class="published flex-fill">
-                            @item.PublishedAt
-                        </div>
-
-                        <div class="channel flex-fill text-right">
-                            @item.Canal.Title
-                        </div>
-
                     </div>
-                </div>
 
-                <div class="buttons buttons-right">
-                    <button class="icon icon-green far fa-check-square" onclick="setAssistido('@item.Id', '@item.Title')"></button>
-                    <button class="icon icon-blue far fa-clock" onclick="setAssistirDepois('@item.Id', '@item.Title')"></button>
-                    <button class="icon icon-yellow far fa-star" onclick="setFavorito('@item.Id', '@item.Title')"></button>
-                    <button class="icon icon-red far fa-minus-square" onclick="setIgnorado('@item.Id', '@item.Title')"></button>
-                    @*<button class="icon icon-red far fa-question-circle" onclick="setConsole('@item.Id', '@item.Title')"></button>*@
-                </div>
+                    <div class="published flex-fill">
+                        @item.PublishedAt
+                    </div>
 
+                    <div class="channel flex-fill text-right">
+                        @item.Canal.Title
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="buttons buttons-right">
+                <button class="icon icon-green far fa-check-square" onclick="setAssistido('@item.Id', '@item.Title')"></button>
+                <button class="icon icon-blue far fa-clock" onclick="setAssistirDepois('@item.Id', '@item.Title')"></button>
+                <button class="icon icon-yellow far fa-star" onclick="setFavorito('@item.Id', '@item.Title')"></button>
+                <button class="icon icon-red far fa-minus-square" onclick="setIgnorado('@item.Id', '@item.Title')"></button>
+                @*<button class="icon icon-red far fa-question-circle" onclick="setConsole('@item.Id', '@item.Title')"></button>*@
             </div>
 
         </div>
+
     </div>
+</div>
 }
 
 <script src="~/js/video.js"></script>

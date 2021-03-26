@@ -55,7 +55,7 @@ namespace myTube.Services.Youtube
                 if (feed.PublishedAt >= publishedAfter)
                 {
                     var videoDB = await _videoRepository.GetByYoutubeId(feed.VideoId, usuarioId);
-                    if (videoDB == null)
+                    if (videoDB == null) // || DateTime.Now >= videoDB.ScheduledStartTime?.AddHours(1) && videoDB.DurationSecs == 0)
                     {
                         result.Add(new YoutubeMovie()
                         {

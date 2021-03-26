@@ -69,6 +69,7 @@ function setAssistirDepois(id, nome) {
 function saveProgress(id, progress) {
     let params = {
         url: `/video/progress?id=${id}&progress=${progress}`,
+        async: true,
         method: 'get',
         success: () => { },
         error: (resp) => { },
