@@ -52,20 +52,16 @@ namespace myTube.Services.Youtube
             var feedList = await GetVideosByFeed(channelId, source);
             foreach (var feed in feedList)
             {
-
-                if (feed.PublishedAt >= publishedAfter)
+                var videoDB = await _videoRepository.GetByYoutubeId(feed.VideoId, usuarioId);
+                if (feed.PublishedAt >= publishedAfter && videoDB == null || videoDB != null && DateTime.Now >= videoDB.ScheduledStartTime?.AddHours(5) && videoDB.DurationSecs == 0)
                 {
-                    var videoDB = await _videoRepository.GetByYoutubeId(feed.VideoId, usuarioId);
-                    if (videoDB == null) // || DateTime.Now >= videoDB.ScheduledStartTime?.AddHours(1) && videoDB.DurationSecs == 0)
+                    result.Add(new YoutubeMovie()
                     {
-                        result.Add(new YoutubeMovie()
-                        {
-                            Id = feed.VideoId,
-                            ChannelId = feed.ChannelId,
-                            PublishedAt = feed.PublishedAt
-                        });
-                        listIds.Add(feed.VideoId);
-                    }
+                        Id = feed.VideoId,
+                        ChannelId = feed.ChannelId,
+                        PublishedAt = feed.PublishedAt
+                    });
+                    listIds.Add(feed.VideoId);
                 }
 
                 if (listIds.Count >= 40)

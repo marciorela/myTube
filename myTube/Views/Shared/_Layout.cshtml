@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@inject myTube.Data.Repositories.VideoRepository _videoRepository
+
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="utf-8" />
@@ -35,7 +37,14 @@
                                 <a class="nav-link text-white-50" asp-area="" asp-controller="Canal" asp-action="Index">Canais</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-white-50" asp-area="" asp-controller="Video" asp-action="Index">Videos <sup><span id="naoassistido" class="badge badge-pill badge-info">@await Component.InvokeAsync("HeaderInfo")</span></sup></a>
+                                @*<a class="nav-link text-white-50" asp-area="" asp-controller="Video" asp-action="Index">Videos <sup><span id="naoassistido" class="badge badge-pill badge-info">@await Component.InvokeAsync("HeaderInfo")</span></sup></a>*@
+                                @{
+                                    var userId = User.Claims.Where(c => c.Type == System.Security.Claims.ClaimTypes.Sid).FirstOrDefault().Value;
+
+                                    // USANDO INJEÇÃO DE DEPENDÊNCIA (@inject)
+                                    var badge = (await _videoRepository.GetListIndex(Guid.Parse(userId))).Count().ToString();
+                                }
+                                <a class="nav-link text-white-50" asp-area="" asp-controller="Video" asp-action="Index">Videos <sup><span id="naoassistido" class="badge badge-pill badge-info">@badge</span></sup></a>
                             </li>
                         </ul>
                     }
@@ -71,10 +80,10 @@
     <div id="modal-placeholder"></div>
 
     @*<footer class="border-top footer text-muted">
-        <div class="container-fluid">
-            &copy; 2021 - myTube - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>*@
+            <div class="container-fluid">
+                &copy; 2021 - myTube - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            </div>
+        </footer>*@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

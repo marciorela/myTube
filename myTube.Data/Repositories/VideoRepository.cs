@@ -35,6 +35,7 @@ namespace myTube.Data.Repositories
             // SE ALGUM VÍDEO TIVER SCHEDULEDSTART, ELE SÓ DEVERÁ APARECER QUANDO FALTAR UMA HORA PARA O INÍCIO
             return (await GetByStatus(usuarioId, EStatusVideo.NaoAssistido))
                 .Where(v => DateTime.Now >= (v.ScheduledStartTime ?? DateTime.Now).AddHours(-1))
+                .Where(v => v.DurationSecs > 0)
                 .ToList();
         }
 
@@ -82,6 +83,12 @@ namespace myTube.Data.Repositories
             _ctx.Entry(video).Property(p => p.Status).IsModified = true;
             _ctx.Entry(video).Property(p => p.DataStatus).IsModified = true;
 
+            await _ctx.SaveChangesAsync();
+        }
+
+        public async Task Update(Filme filme)
+        {
+            _ctx.Filmes.Update(filme);
             await _ctx.SaveChangesAsync();
         }
     }

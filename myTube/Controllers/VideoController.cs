@@ -27,6 +27,12 @@ namespace myTube.Controllers
         }
 
         [HttpGet]
+        public IActionResult Total()
+        {
+            return Ok();
+        }
+
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
             var videos = await _videoRepository.GetListIndex(_usuarioService.Id);
