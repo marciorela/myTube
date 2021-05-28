@@ -1,11 +1,15 @@
-﻿{
+{
   "profiles": {
     "myTube.WS": {
       "commandName": "Project",
-      "dotnetRunMessages": "true",
       "environmentVariables": {
-        "DOTNET_ENVIRONMENT": "Development"
-      }
+        "DOTNET_ENVIRONMENT": "Development",
+        "CONNECTION_STRING": "Server=192.168.1.56;userid=root;pwd=sasasa;port=3306;database=myTube_dev"
+      },
+      "dotnetRunMessages": "true"
+    },
+    "Docker": {
+      "commandName": "Docker"
     }
   }
 }

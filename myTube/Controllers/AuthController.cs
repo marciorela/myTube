@@ -46,7 +46,7 @@ namespace myTube.Controllers
             if (usuario == null)
             {
                 TempData["msg-error"] = "Usuário e/ou senha inválidos";
-                return View(login);
+                return RedirectToAction(nameof(Login)); // View(login);
             }
 
             await _usuarioService.SignIn(usuario);
