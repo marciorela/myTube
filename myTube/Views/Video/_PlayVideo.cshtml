@@ -22,6 +22,10 @@
                         </div>
 
                         <div class="speed-group">
+                            <button class="speed-button" onclick="clickLeft()"><<<</button>
+                            <button class="speed-button" onclick="clickRight()">>>></button>
+                            <span style="margin-left:20px"></span>
+
                             <button id="1x" class="speed-button" onclick="setSpeed(1)">1x</button>
                             <button id="1.5x" class="speed-button" onclick="setSpeed(1.5)">1.5x</button>
                             <button id="2x" class="speed-button" onclick="setSpeed(2)">2x</button>
@@ -37,13 +41,16 @@
             </div>
 
             <div class="modal-body">
-                <div class="embed-responsive embed-responsive-16by9">
-                    <div id="player"></div>
-                </div>
-
-                <div id="progressBar">
-                    <div>
+                <div class="zd-flex">
+                    @*<div class="align-content-center" style="background-color: gray" onclick="clickLeft()"><img src="~/img/replay.png" alt="Voltar 10 segundos" /></div>*@
+                    <div class="embed-responsive embed-responsive-16by9">
+                        <div id="player"></div>
                     </div>
+                    <div id="progressBar">
+                        <div id="progress1">
+                        </div>
+                    </div>
+                    @*<div style="background-color: gray" onclick="clickRight()"><img src="~/img/forward.png" alt="Avançar 10 segundos" /></div>*@
                 </div>
             </div>
         </div>
@@ -66,6 +73,7 @@
         playerVars: {
             'controls': 1,
             'start': @Model.WatchedSecs,
+            'autohide': 3
         },
         events: {
             'onReady': onPlayerReady,
@@ -75,7 +83,7 @@
 
     function progress(percent, $element) {
         var progressBarWidth = percent * $element.width() / 100;
-
+        //console.log($element.find('div'));
         $element.find('div').animate({ width: progressBarWidth });
     }
 
@@ -133,5 +141,13 @@
 
     function stopVideo() {
         player.stopVideo();
+    }
+
+    function clickLeft() {
+        player.seekTo(player.getCurrentTime() - 10);
+    }
+
+    function clickRight() {
+        player.seekTo(player.getCurrentTime() + 10);
     }
 </script>
