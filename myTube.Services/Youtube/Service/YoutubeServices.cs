@@ -55,6 +55,13 @@ namespace myTube.Services.Youtube
                 var videoDB = await _videoRepository.GetByYoutubeId(feed.VideoId, usuarioId);
                 if (feed.PublishedAt >= publishedAfter && videoDB == null || videoDB != null && DateTime.Now >= videoDB.ScheduledStartTime?.AddHours(5) && videoDB.DurationSecs == 0 && videoDB.Status == EStatusVideo.NaoAssistido)
                 {
+
+                    if (videoDB != null)
+                    {
+                        _logger.LogInformation("Atualizando status do vídeo {Video}", videoDB.Id);
+                    }
+
+
                     result.Add(new YoutubeMovie()
                     {
                         Id = feed.VideoId,
