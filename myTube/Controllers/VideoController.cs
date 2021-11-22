@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MR.String;
 using myTube.Domain.Entities;
+using myTube.Models.DTO;
 
 namespace myTube.Controllers
 {
@@ -33,13 +34,21 @@ namespace myTube.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(PesquisaDTO pesquisa)
         {
-            var videos = await _videoRepository.GetListIndex(_usuarioService.Id);
+            var videos = await _videoRepository.GetListIndex(_usuarioService.Id, pesquisa.CanalId, pesquisa.Watch);
             foreach (var video in videos)
             {
-                video.WatchedSecs = video.WatchedSecs > 30 ? Math.Max(video.WatchedSecs - 15, 0) : 0;
+                if (video.Status == EStatusVideo.NaoAssistido)
+                {
+                    video.WatchedSecs = video.WatchedSecs > 30 ? Math.Max(video.WatchedSecs - 15, 0) : 0;
+                }
+                else
+                {
+                    video.WatchedSecs = 0;
+                }
             }
+            ViewBag.Pesquisa = pesquisa;
 
             return View(videos);
         }

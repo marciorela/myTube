@@ -22,8 +22,10 @@ namespace myTube.Models.Components
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            var cont = (await _videoRepository.GetListIndex(_usuarioService.Id)).Count();
-            return View(cont);
+            //var cont = (await _videoRepository.GetListIndex(_usuarioService.Id, null)).Count();
+            //return View(cont);
+
+            throw new NotImplementedException();
         }
     }
 

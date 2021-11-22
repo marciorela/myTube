@@ -37,6 +37,10 @@
     color: #740101;
 }
 
+.icon-gray {
+    color: gray; /*darkslategray;*/
+}
+
 .bg {
     background-color: red;
 }
@@ -85,6 +89,16 @@
 .title a {
     text-decoration: none;
     color: white !important;
+}
+
+a {
+    /*text-decoration: none;*/
+    color: inherit; /* white !important;*/
+}
+
+a:hover {
+    text-decoration: none;
+    color: inherit; /* white !important;*/
 }
 
 .buttons {
@@ -172,6 +186,11 @@ h5 {
     border: none;
     color: var(--video-link-color);
     background-color: var(--background-color);
+}
+
+.button-canal {
+    padding-top: 10px;
+    /*background-color: red;*/
 }
 
 .button-link:focus {

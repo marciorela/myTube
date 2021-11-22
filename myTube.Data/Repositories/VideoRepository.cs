@@ -30,12 +30,22 @@ namespace myTube.Data.Repositories
             await _ctx.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<Filme>> GetListIndex(Guid usuarioId)
+        public async Task<IEnumerable<Filme>> GetListIndex(Guid usuarioId, string canalId, string watch = "")
         {
+            watch ??= "";
+
             // SE ALGUM VÍDEO TIVER SCHEDULEDSTART, ELE SÓ DEVERÁ APARECER QUANDO FALTAR UMA HORA PARA O INÍCIO
-            return (await GetByStatus(usuarioId, EStatusVideo.NaoAssistido))
+            return (await GetByUsuario(usuarioId))
                 .Where(v => DateTime.Now >= (v.ScheduledStartTime ?? DateTime.Now).AddHours(-1))
                 .Where(v => v.DurationSecs > 0)
+                .Where(v => canalId != null && v.CanalId == Guid.Parse(canalId) || canalId == null)
+                .Where(v => 
+                    (watch == "" || watch.Length == 4) && v.Status == EStatusVideo.NaoAssistido ||
+                    watch.Contains("L") && v.Status == EStatusVideo.AssistirDepois||
+                    watch.Contains("A") && v.Status == EStatusVideo.Assistido ||
+                    watch.Contains("I") && v.Status == EStatusVideo.Ignorado||
+                    watch.Contains("F") && v.Status == EStatusVideo.Favorito
+                    )
                 .ToList();
         }
 
@@ -61,28 +71,41 @@ namespace myTube.Data.Repositories
             await _ctx.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<Filme>> GetByStatus(Guid usuarioId, EStatusVideo status)
+        public async Task<IEnumerable<Filme>> GetByUsuario(Guid usuarioId)
         {
             return await _ctx.Filmes
                 .Include(i => i.Canal)
-                .Where(v => v.Canal.UsuarioId == usuarioId && v.Status == status)
+                .Where(v => v.Canal.UsuarioId == usuarioId)
                 .OrderBy(v => v.ScheduledStartTime ?? v.PublishedAt)
                 .ToListAsync();
         }
 
         public async Task ChangeStatus(Guid id, EStatusVideo status)
         {
-            var video = new Filme()
+            var old = await GetById(id);
+
+            old.DataStatus = DateTime.Now;
+            if (old.Status == status)
             {
-                Id = id,
-                Status = status,
-                DataStatus = DateTime.Now
-            };
+                old.Status = EStatusVideo.NaoAssistido;
+            }
+            else
+            {
+                old.Status = status;
+            }
 
-            _ctx.Filmes.Attach(video);
-            _ctx.Entry(video).Property(p => p.Status).IsModified = true;
-            _ctx.Entry(video).Property(p => p.DataStatus).IsModified = true;
+            //var video = new Filme()
+            //{
+            //    Id = id,
+            //    Status = (old.Status == status ? EStatusVideo.NaoAssistido : status),
+            //    DataStatus = DateTime.Now
+            //};
 
+            //_ctx.Filmes.Attach(video);
+            //_ctx.Entry(video).Property(p => p.Status).IsModified = true;
+            //_ctx.Entry(video).Property(p => p.DataStatus).IsModified = true;
+
+            _ctx.Filmes.Update(old);
             await _ctx.SaveChangesAsync();
         }
 
