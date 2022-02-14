@@ -10,15 +10,17 @@ namespace myTube.Domain.Enums
     public enum EStatusVideo
     {
         [Description("Não Assistido")]
-        NaoAssistido,
+        NaoAssistido = 0,
 
-        Assistido,
+        Assistido = 1,
 
-        Ignorado,
+        Ignorado = 2,
 
-        Favorito,
+        Favorito = 3,
 
         [Description("Assistir depois")]
-        AssistirDepois
+        AssistirDepois = 4,
+
+        Cancelado = 5
     }
 }

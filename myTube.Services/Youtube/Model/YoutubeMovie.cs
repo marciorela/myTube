@@ -17,6 +17,7 @@ namespace myTube.Services.Youtube.Model
         public string Title { get; set; }
         public string ETag { get; set; }
         public double DurationSecs { get; set; }
+        public bool Checked { get; set; }
 
         public string ThumbnailMaxUrl { get; set; }
         public string ThumbnailMediumUrl { get; set; }

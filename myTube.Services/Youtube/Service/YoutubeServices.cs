@@ -48,7 +48,6 @@ namespace myTube.Services.Youtube
             var result = new List<YoutubeMovie>();
 
             var cost = 0;
-            var listIds = new List<string>();
             var feedList = await GetVideosByFeed(channelId, source);
             foreach (var feed in feedList)
             {
@@ -59,8 +58,8 @@ namespace myTube.Services.Youtube
                     if (videoDB != null)
                     {
                         _logger.LogInformation("Atualizando status do vídeo {Video}", videoDB.Id);
+                        _logger.LogInformation("{@Video}", videoDB);
                     }
-
 
                     result.Add(new YoutubeMovie()
                     {
@@ -68,19 +67,17 @@ namespace myTube.Services.Youtube
                         ChannelId = feed.ChannelId,
                         PublishedAt = feed.PublishedAt
                     });
-                    listIds.Add(feed.VideoId);
                 }
-
-                if (listIds.Count >= 40)
+                
+                if (result.Count >= 40)
                 {
-                    cost += await GetExtraVideosInformation(apiKey, string.Join(",", listIds), result);
-                    listIds.Clear();
+                    break;
                 }
             }
 
-            if (listIds.Count > 0)
+            if (result.Count > 0)
             {
-                cost += await GetExtraVideosInformation(apiKey, string.Join(",", listIds), result);
+                cost += await GetExtraVideosInformation(apiKey, result);
             }
 
             return (result, cost);
@@ -119,7 +116,6 @@ namespace myTube.Services.Youtube
         {
             var result = new List<YoutubeMovie>();
 
-            var listIds = new List<string>();
             var (videos, cost) = await _GetVideosByChannelId(apiKey, channelId, publishedAfter);
             foreach (var video in videos)
             {
@@ -135,18 +131,16 @@ namespace myTube.Services.Youtube
                     ThumbnailMediumUrl = video.Snippet.Thumbnails.Medium.Url.Replace("_live", ""),
                     ThumbnailMaxUrl = video.Snippet.Thumbnails.High.Url.Replace("_live", ""),
                 });
-                listIds.Add(video.Id.VideoId);
 
-                if (listIds.Count >= 40)
+                if (result.Count >= 40)
                 {
-                    cost += await GetExtraVideosInformation(apiKey, string.Join(",", listIds), result);
-                    listIds.Clear();
+                    break;
                 }
             }
 
-            if (listIds.Count > 0)
+            if (result.Count > 0)
             {
-                cost += await GetExtraVideosInformation(apiKey, string.Join(",", listIds), result);
+                cost += await GetExtraVideosInformation(apiKey, result);
             }
 
             return (result, cost);
@@ -258,16 +252,20 @@ namespace myTube.Services.Youtube
             });
         }
 
-        private async Task<int> GetExtraVideosInformation(string apiKey, string videoIds, List<YoutubeMovie> listMovies)
+        public async Task<int> GetExtraVideosInformation(string apiKey, List<YoutubeMovie> listMovies)
         {
             try
             {
+                var videoIds = string.Join(",", listMovies.Select(x => x.Id));
+
                 var (list, cost) = await GetInfoVideoAsync(apiKey, videoIds);
                 foreach (var video in list)
                 {
                     var videoInList = LocateVideoById(video.Id, listMovies);
                     if (videoInList != null)
                     {
+                        videoInList.Checked = true;
+
                         videoInList.Description = video.Snippet.Description;
                         videoInList.DurationSecs = YoutubeTimeToSecs(video.ContentDetails.Duration);
                         videoInList.Title = video.Snippet.Title;

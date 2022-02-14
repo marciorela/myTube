@@ -109,6 +109,14 @@ namespace myTube.Data.Repositories
             await _ctx.SaveChangesAsync();
         }
 
+        public async Task<IEnumerable<Filme>> GetZeroSecondsVideos(Canal canal)
+        {
+            return await _ctx.Filmes
+                .Where(f => f.CanalId == canal.Id && f.DurationSecs == 0)
+                .Where(f => f.Status != EStatusVideo.Cancelado)
+                .ToListAsync();
+        }
+
         public async Task Update(Filme filme)
         {
             _ctx.Filmes.Update(filme);

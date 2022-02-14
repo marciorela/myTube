@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using myTube.Data.Repositories;
 using myTube.Domain.Entities;
+using myTube.Domain.Enums;
 using myTube.Services.XML;
 using myTube.Services.Youtube;
 using myTube.Services.Youtube.Model;
@@ -81,6 +82,28 @@ namespace myTube.Services
                 _logger.LogInformation("Videos encontrados: {videos}", videos.Count);
 
                 var maxData = await UpdateVideoInformation(canal, videos);
+
+                // FAZ A BUSCA DOS VIDEOS QUE ESTÃO NO BANCO DE DADOS, MAS ESTÃO DESATUALIZADOS
+                var videosOld = await _filmeRepository.GetZeroSecondsVideos(canal);
+                if (videosOld.Any())
+                {
+                    videos.Clear();
+                    videos = videosOld.Select(x => new YoutubeMovie
+                    {
+                        Id = x.YoutubeFilmeId,
+                        ChannelId = x.CanalId.ToString(),
+                        PublishedAt = x.PublishedAt
+                    }).ToList();
+
+                    var cost = await _youTubeServices.GetExtraVideosInformation(canal.Usuario.ApiKey, videos);
+                    await UpdateVideoInformation(canal, videos);
+
+                    if (cost > 0)
+                    {
+                        await _logYoutubeRepository.Add("VideosByChannel", cost);
+                    }
+                }
+
                 await _canalRepository.UpdateUltimaBusca(canal, DateTime.Now, maxData);
             }
 
@@ -110,7 +133,8 @@ namespace myTube.Services
                         ThumbnailMediumUrl = video.ThumbnailMediumUrl,
                         ThumbnailMinUrl = video.ThumbnailMinUrl,
                         Title = video.Title,
-                        ETag = video.ETag ?? ""
+                        ETag = video.ETag ?? "",
+                        Status = video.Checked ? EStatusVideo.NaoAssistido : EStatusVideo.Cancelado
                     });
 
                     try
@@ -123,6 +147,11 @@ namespace myTube.Services
                 }
                 else
                 {
+                    if (!video.Checked)
+                    {
+                        filmeDB.Status = EStatusVideo.Cancelado;
+                    }
+
                     filmeDB.DurationSecs = video.DurationSecs;
                     await _filmeRepository.Update(filmeDB);
                 }
@@ -151,8 +180,10 @@ namespace myTube.Services
         [XmlElement(ElementName = "updated")]
         public string Updated { get; set; }
 
-        public DateTime PublishedAt {
-            get {
+        public DateTime PublishedAt
+        {
+            get
+            {
                 return DateTime.Parse(Published, CultureInfo.InvariantCulture);
             }
         }
