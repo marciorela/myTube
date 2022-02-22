@@ -62,7 +62,7 @@
 							}
 							else
 							{
-								<label class="duration">@duration</label>
+								<label class="duration @(duration.TotalMinutes >= 40 ? "live" : "")">@duration</label>
 							}
 						</div>
 
