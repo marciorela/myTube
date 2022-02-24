@@ -10,5 +10,6 @@ namespace myTube.Models.DTO
     {
         public string CanalId { get; set; }
         public string Watch { get; set; }
+        public string Categoria { get; set; }
     }
 }

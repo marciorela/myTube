@@ -196,3 +196,7 @@ h5 {
 .button-link:focus {
     outline: none;
 }
+
+.filtro div {
+    display: inline-block;
+}

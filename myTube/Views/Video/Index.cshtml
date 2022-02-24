@@ -5,9 +5,10 @@
 @{
 	var canalId = Context.Request.Query["CanalId"].ToString();
 	string watch = Context.Request.Query["Watch"].ToString();
+	string categoria = Context.Request.Query["Categoria"].ToString();
 }
 
-<div>
+<div class="filtro">
 	@*<span>@ViewBag.Pesquisa</span>*@
 
 @*	<input type="text" />
@@ -18,6 +19,18 @@
 		<button class="icon far fa-clock @(watch.Contains("L") ? "icon-blue" : "icon-gray")" onclick="setFilterAssistirDepois()"></button>
 		<button class="icon far fa-star @(watch.Contains("F") ? "icon-yellow" : "icon-gray")" onclick="setFilterFavorito()"></button>
 		<button class="icon far fa-minus-square @(watch.Contains("I") ? "icon-red" : "icon-gray")" onclick="setFilterIgnorado()"></button>
+	</div>
+
+	<div>
+		<label for="filtro_categoria">Categorias</label>
+		<select name="filtro_categoria" id="categorias" onchange="setFilterCategoria()" aria-selected="true">
+
+			<option value="" selected="@(string.IsNullOrWhiteSpace(categoria))")>Todas as categorias</option>
+			@foreach (var cat in ViewBag.Categorias)
+			{
+				<option value="@cat" selected="@(cat == categoria)">@cat</option>
+			}
+		</select>
 	</div>
 </div>
 

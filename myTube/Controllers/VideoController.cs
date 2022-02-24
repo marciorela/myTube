@@ -19,11 +19,13 @@ namespace myTube.Controllers
     public class VideoController : Controller
     {
         private readonly VideoRepository _videoRepository;
+        private readonly CanalRepository _canalRepository;
         private readonly UsuarioService _usuarioService;
 
-        public VideoController(VideoRepository videoRepository, UsuarioService usuarioService)
+        public VideoController(VideoRepository videoRepository, CanalRepository canalRepository, UsuarioService usuarioService)
         {
             _videoRepository = videoRepository;
+            _canalRepository = canalRepository;
             _usuarioService = usuarioService;
         }
 
@@ -36,7 +38,7 @@ namespace myTube.Controllers
         [HttpGet]
         public async Task<IActionResult> Index(PesquisaDTO pesquisa)
         {
-            var videos = await _videoRepository.GetListIndex(_usuarioService.Id, pesquisa.CanalId, pesquisa.Watch);
+            var videos = await _videoRepository.GetListIndex(_usuarioService.Id, pesquisa.CanalId, pesquisa.Watch, pesquisa.Categoria);
             foreach (var video in videos)
             {
                 if (video.Status == EStatusVideo.NaoAssistido)
@@ -48,7 +50,7 @@ namespace myTube.Controllers
                     video.WatchedSecs = 0;
                 }
             }
-            ViewBag.Pesquisa = pesquisa;
+            ViewBag.Categorias = await _canalRepository.CategoriasPorUsuario(_usuarioService.Id);
 
             return View(videos);
         }

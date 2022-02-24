@@ -30,7 +30,7 @@ namespace myTube.Data.Repositories
             await _ctx.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<Filme>> GetListIndex(Guid usuarioId, string canalId, string watch = "")
+        public async Task<IEnumerable<Filme>> GetListIndex(Guid usuarioId, string canalId, string watch = "", string categoria = null)
         {
             watch ??= "";
 
@@ -39,6 +39,7 @@ namespace myTube.Data.Repositories
                 .Where(v => DateTime.Now >= (v.ScheduledStartTime ?? DateTime.Now).AddHours(-1))
                 .Where(v => v.DurationSecs > 0)
                 .Where(v => canalId != null && v.CanalId == Guid.Parse(canalId) || canalId == null)
+                .Where(v => string.IsNullOrWhiteSpace(categoria) || v.Canal.Categoria == categoria)
                 .Where(v => 
                     (watch == "" || watch.Length == 4) && v.Status == EStatusVideo.NaoAssistido ||
                     watch.Contains("L") && v.Status == EStatusVideo.AssistirDepois||

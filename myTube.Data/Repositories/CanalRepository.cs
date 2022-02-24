@@ -54,6 +54,16 @@ namespace myTube.Data.Repositories
                 .FirstOrDefaultAsync();
         }
 
+        public async Task<IEnumerable<string>> CategoriasPorUsuario(Guid usuarioId)
+        {
+            return await _ctx.Canais
+                .Where(c => c.UsuarioId == usuarioId)
+                .Where(c => !string.IsNullOrWhiteSpace(c.Categoria))
+                .Select(c => c.Categoria)
+                .Distinct()
+                .ToListAsync();
+        }
+
         public async Task Update(Canal canal)
         {
             _ctx.Canais.Update(canal);

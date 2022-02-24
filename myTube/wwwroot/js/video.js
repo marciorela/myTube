@@ -4,6 +4,7 @@
 
     filterWatch = urlParams.get('Watch') || "";
     filterCanalId = urlParams.get('CanalId') || "";
+    filterCategoria = urlParams.get('Categoria') || "";
 
     console.log(filterWatch);
     console.log(filterCanalId);
@@ -129,6 +130,11 @@ function setFilterIgnorado() {
     Pesquisar();
 }
 
+function setFilterCategoria() {
+    filterCategoria = $('#categorias').val();
+    Pesquisar();
+}
+
 function setCanalId(canalId) {
     if (canalId == filterCanalId) {
         filterCanalId = "";
@@ -159,6 +165,10 @@ function Pesquisar() {
 
     if (filterWatch != "") {
         url = AddFilter(url, "Watch=" + filterWatch);
+    }
+
+    if (filterCategoria != "") {
+        url = AddFilter(url, "Categoria=" + filterCategoria);
     }
 
     window.location.replace("/Video" + url);

@@ -29,6 +29,9 @@ namespace myTube.Domain.Entities
         [Required]
         public ESource Source { get; set; } = ESource.Canal;
 
+        [StringLength(50)]
+        public string Categoria { get; set; }
+
         // READ-ONLY - INFORMAÇÕES CONSULTADAS NA API
         [StringLength(50)]
         public string ETag { get; set; }
