@@ -3,6 +3,7 @@ using Google.Apis.YouTube.v3;
 using Google.Apis.YouTube.v3.Data;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using myTube.Data;
 using myTube.Data.Repositories;
 using myTube.Domain.Entities;
 using myTube.Services;
@@ -21,16 +22,19 @@ namespace myTube.WS
         private readonly ILogger<WSCheck> _logger;
         private readonly CheckVideoService _checkVideoService;
         private readonly CheckChannelService _checkChannelService;
+        private readonly AppDbContext _context;
 
         public WSCheck(
             ILogger<WSCheck> logger,
             CheckVideoService checkVideoService,
-            CheckChannelService checkChannelService
+            CheckChannelService checkChannelService,
+            AppDbContext context
             )
         {
             _logger = logger;
             _checkVideoService = checkVideoService;
             _checkChannelService = checkChannelService;
+            _context = context;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -67,6 +71,9 @@ namespace myTube.WS
                 {
                     _logger.LogError(e, e.Message);
                 }
+
+                _logger.LogInformation("Removendo ChangeTracker...");
+                _context.ChangeTracker.Clear();
 
                 _logger.LogInformation("Aguardando...");
                 await Task.Delay(60000, stoppingToken);
