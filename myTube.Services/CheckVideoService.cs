@@ -151,8 +151,17 @@ namespace myTube.Services
                     {
                         filmeDB.Status = EStatusVideo.Cancelado;
                     }
-
                     filmeDB.DurationSecs = video.DurationSecs;
+                    filmeDB.PublishedAt = video.PublishedAt;
+                    filmeDB.ScheduledStartTime = video.ScheduledStartTime;
+                    filmeDB.Summary = video.Summary;
+                    filmeDB.Description = video.Description;
+                    filmeDB.ThumbnailMaxUrl = video.ThumbnailMaxUrl;
+                    filmeDB.ThumbnailMediumUrl = video.ThumbnailMediumUrl;
+                    filmeDB.ThumbnailMinUrl = video.ThumbnailMinUrl;
+                    filmeDB.Title = video.Title;
+                    filmeDB.ETag = video.ETag ?? "";
+
                     await _filmeRepository.Update(filmeDB);
                 }
             }

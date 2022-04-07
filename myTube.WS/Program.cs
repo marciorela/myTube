@@ -41,10 +41,10 @@ namespace myTube.WS
                     services.AddTransient<VideoRepository>();
                     services.AddTransient<LogYoutubeRepository>();
 
-                    services.AddSingleton<CheckChannelService>();
-                    services.AddSingleton<CheckVideoService>();
+                    services.AddTransient<CheckChannelService>();
+                    services.AddTransient<CheckVideoService>();
 
-                    services.AddSingleton<YoutubeServices>();
+                    services.AddTransient<YoutubeServices>();
 
                     services.AddHostedService<WSCheck>();
                 });

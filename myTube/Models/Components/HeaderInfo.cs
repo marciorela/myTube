@@ -20,13 +20,13 @@ namespace myTube.Models.Components
             _usuarioService = usuarioService;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync()
-        {
-            //var cont = (await _videoRepository.GetListIndex(_usuarioService.Id, null)).Count();
-            //return View(cont);
+        //public async Task<IViewComponentResult> InvokeAsync()
+        //{
+        //    //var cont = (await _videoRepository.GetListIndex(_usuarioService.Id, null)).Count();
+        //    //return View(cont);
 
-            throw new NotImplementedException();
-        }
+        //    throw new NotImplementedException();
+        //}
     }
 
 }

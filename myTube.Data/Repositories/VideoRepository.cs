@@ -113,7 +113,7 @@ namespace myTube.Data.Repositories
         public async Task<IEnumerable<Filme>> GetZeroSecondsVideos(Canal canal)
         {
             return await _ctx.Filmes
-                .Where(f => f.CanalId == canal.Id && f.DurationSecs == 0)
+                .Where(f => f.CanalId == canal.Id && f.DurationSecs == 0 && DateTime.Now >= (f.ScheduledStartTime ?? DateTime.MinValue))
                 .Where(f => f.Status != EStatusVideo.Cancelado)
                 .ToListAsync();
         }

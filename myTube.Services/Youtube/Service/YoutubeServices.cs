@@ -58,7 +58,10 @@ namespace myTube.Services.Youtube
                     if (videoDB != null)
                     {
                         _logger.LogInformation("Atualizando status do vídeo {Video}", videoDB.Id);
-                        _logger.LogInformation("{@Video}", videoDB);
+                        _logger.LogInformation("PublishedAt: ", videoDB.PublishedAt);
+                        _logger.LogInformation("DurationSecs: ", videoDB.DurationSecs);
+                        _logger.LogInformation("Status: ", videoDB.Status);
+                        //_logger.LogInformation("{@Video}", videoDB);
                     }
 
                     result.Add(new YoutubeMovie()
