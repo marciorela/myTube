@@ -21,4 +21,8 @@
     <ProjectReference Include="..\myTube.Domain\myTube.Domain.csproj" />
     <ProjectReference Include="..\myTube.Services\myTube.Services.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+	<Content Update="appsettings*.json" CopyToPublishDirectory="Never" />
+  </ItemGroup>
 </Project>
