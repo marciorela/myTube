@@ -53,6 +53,7 @@ namespace myTube.Data.Repositories
         public async Task<Filme> GetById(Guid id)
         {
             return await _ctx.Filmes
+                .AsNoTracking()
                 .Include(c => c.Canal)
                 .Include(c => c.Canal.Usuario)
                 .Where(f => f.Id == id)
@@ -75,6 +76,7 @@ namespace myTube.Data.Repositories
         public async Task<IEnumerable<Filme>> GetByUsuario(Guid usuarioId)
         {
             return await _ctx.Filmes
+                .AsNoTracking()
                 .Include(i => i.Canal)
                 .Where(v => v.Canal.UsuarioId == usuarioId)
                 .OrderBy(v => v.ScheduledStartTime ?? v.PublishedAt)
@@ -113,6 +115,7 @@ namespace myTube.Data.Repositories
         public async Task<IEnumerable<Filme>> GetZeroSecondsVideos(Canal canal)
         {
             return await _ctx.Filmes
+                .AsNoTracking()
                 .Where(f => f.CanalId == canal.Id && f.DurationSecs == 0 && DateTime.Now >= (f.ScheduledStartTime ?? DateTime.MinValue))
                 .Where(f => f.Status != EStatusVideo.Cancelado)
                 .ToListAsync();

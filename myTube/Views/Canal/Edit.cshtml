@@ -1,0 +1,119 @@
+﻿@model myTube.Domain.Entities.Canal
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Canal</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="YoutubeCanalId" class="control-label"></label>
+                <input asp-for="YoutubeCanalId" class="form-control" disabled/>
+                <span asp-validation-for="YoutubeCanalId" class="text-danger"></span>
+            </div>
+@*
+            <div class="form-group">
+                <label asp-for="UltimaBusca" class="control-label"></label>
+                <input asp-for="UltimaBusca" class="form-control" />
+                <span asp-validation-for="UltimaBusca" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UltimoVideo" class="control-label"></label>
+                <input asp-for="UltimoVideo" class="form-control" />
+                <span asp-validation-for="UltimoVideo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PrimeiraBusca" class="control-label"></label>
+                <input asp-for="PrimeiraBusca" class="form-control" />
+                <span asp-validation-for="PrimeiraBusca" class="text-danger"></span>
+            </div>
+*@
+            <div class="form-group">
+                <label asp-for="Source" class="control-label"></label>
+                <select asp-for="Source" asp-items="@ViewBag.SourceItems" name="Source" class="form-control"></select>
+                <span asp-validation-for="Source" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Categoria" class="control-label"></label>
+                <input asp-for="Categoria" class="form-control" />
+                <span asp-validation-for="Categoria" class="text-danger"></span>
+            </div>
+@*
+            <div class="form-group">
+                <label asp-for="ETag" class="control-label"></label>
+                <input asp-for="ETag" class="form-control" />
+                <span asp-validation-for="ETag" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CustomUrl" class="control-label"></label>
+                <input asp-for="CustomUrl" class="form-control" />
+                <span asp-validation-for="CustomUrl" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Title" class="control-label"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ThumbnailMinUrl" class="control-label"></label>
+                <input asp-for="ThumbnailMinUrl" class="form-control" />
+                <span asp-validation-for="ThumbnailMinUrl" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ThumbnailMediumUrl" class="control-label"></label>
+                <input asp-for="ThumbnailMediumUrl" class="form-control" />
+                <span asp-validation-for="ThumbnailMediumUrl" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ThumbnailMaxUrl" class="control-label"></label>
+                <input asp-for="ThumbnailMaxUrl" class="form-control" />
+                <span asp-validation-for="ThumbnailMaxUrl" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PublishedAt" class="control-label"></label>
+                <input asp-for="PublishedAt" class="form-control" />
+                <span asp-validation-for="PublishedAt" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UsuarioId" class="control-label"></label>
+                <select asp-for="UsuarioId" class="form-control" asp-items="ViewBag.UsuarioId"></select>
+                <span asp-validation-for="UsuarioId" class="text-danger"></span>
+            </div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="Data" class="control-label"></label>
+                <input asp-for="Data" class="form-control" />
+                <span asp-validation-for="Data" class="text-danger"></span>
+            </div>
+*@
+            <div class="form-group">
+                <label asp-for="Status" class="control-label"></label>
+                @*<select asp-for="Status" class="form-control"></select>*@
+                <select asp-for="Status" asp-items="@ViewBag.StatusItems" name="Status" class="form-control"></select>
+                <span asp-validation-for="Status" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

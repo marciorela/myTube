@@ -37,7 +37,7 @@ namespace myTube.Data.Repositories
         {
             return await _ctx.Canais
                 .Where(c => c.UsuarioId == usuarioId)
-                .OrderBy(c => c.Title)
+                .OrderBy(c => c.Status).ThenBy(c => c.Title)
                 .ToListAsync();
         }
 
@@ -87,6 +87,11 @@ namespace myTube.Data.Repositories
 
             _ctx.Entry(canal).Property(x => x.Status).IsModified = true;
             await _ctx.SaveChangesAsync();
+        }
+
+        public async Task<Canal> GetByIdAsync(Guid id)
+        {
+            return await _ctx.Canais.FirstOrDefaultAsync(c => c.Id == id);
         }
     }
 }

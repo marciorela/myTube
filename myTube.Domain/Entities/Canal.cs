@@ -14,6 +14,7 @@ namespace myTube.Domain.Entities
     {
         [Required]
         [StringLength(50)]
+        [Display(Name = "Id do Canal ou Playlist")]
         public string YoutubeCanalId { get; set; }
 
         [Display(Name = "Última Busca")]

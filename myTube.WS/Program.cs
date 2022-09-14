@@ -34,17 +34,17 @@ namespace myTube.WS
                 .MRConfigureLogService()
                 .ConfigureServices((hostContext, services) =>
                 {
-                    services.AddTransient<AppDbContext>();
+                    services.AddSingleton<AppDbContext>();
 
-                    services.AddTransient<UsuarioRepository>();
-                    services.AddTransient<CanalRepository>();
-                    services.AddTransient<VideoRepository>();
-                    services.AddTransient<LogYoutubeRepository>();
+                    services.AddSingleton<UsuarioRepository>();
+                    services.AddSingleton<CanalRepository>();
+                    services.AddSingleton<VideoRepository>();
+                    services.AddSingleton<LogYoutubeRepository>();
 
-                    services.AddTransient<CheckChannelService>();
-                    services.AddTransient<CheckVideoService>();
+                    services.AddSingleton<CheckChannelService>();
+                    services.AddSingleton<CheckVideoService>();
 
-                    services.AddTransient<YoutubeServices>();
+                    services.AddSingleton<YoutubeServices>();
 
                     services.AddHostedService<WSCheck>();
                 });

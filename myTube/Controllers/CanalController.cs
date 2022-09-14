@@ -44,12 +44,11 @@ namespace myTube.Controllers
             return View();
         }
 
-        // GET: CanalController/Create
-        public ActionResult Create()
+        private static List<SelectListItem> GetListItemsESource()
         {
             var values = Enum.GetValues(typeof(ESource));
             var items = new List<SelectListItem>(values.Length);
-            
+
             foreach (var value in values)
             {
                 items.Add(new SelectListItem
@@ -60,7 +59,30 @@ namespace myTube.Controllers
                 });
             }
 
-            ViewBag.SourceItems = items;
+            return items;
+        }
+
+        private static List<SelectListItem> GetListItemsEStatus()
+        {
+            var values = Enum.GetValues(typeof(EStatusCanal));
+            var items = new List<SelectListItem>(values.Length);
+
+            foreach (var value in values)
+            {
+                items.Add(new SelectListItem
+                {
+                    Text = ((EStatusCanal)value).GetDescription() ?? value.ToString(),
+                    Value = ((int)value).ToString()
+                });
+            }
+
+            return items;
+        }
+
+        // GET: CanalController/Create
+        public ActionResult Create()
+        {
+            ViewBag.SourceItems = GetListItemsESource();
             var canal = new Canal
             {
                 PrimeiraBusca = DateTime.Now.AddDays(-30),
@@ -103,15 +125,24 @@ namespace myTube.Controllers
         }
 
         // GET: CanalController/Edit/5
-        public ActionResult Edit(Guid id)
+        public async Task<ActionResult> Edit(Guid id)
         {
-            return View();
+            ViewBag.SourceItems = GetListItemsESource();
+            ViewBag.StatusItems = GetListItemsEStatus();
+
+            var canal = await _canalRepository.GetByIdAsync(id);
+            if (canal is not null)
+            {
+                return View(canal);
+            }
+
+            return NotFound();
         }
 
         // POST: CanalController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(Guid id, IFormCollection collection)
         {
             try
             {
