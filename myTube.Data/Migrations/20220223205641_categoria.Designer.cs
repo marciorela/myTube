@@ -10,7 +10,7 @@ namespace myTube.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     [Migration("20220223205641_categoria")]
-    partial class categoria
+    partial class Categoria
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

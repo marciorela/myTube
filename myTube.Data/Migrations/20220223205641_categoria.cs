@@ -2,7 +2,7 @@
 
 namespace myTube.Data.Migrations
 {
-    public partial class categoria : Migration
+    public partial class Categoria : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

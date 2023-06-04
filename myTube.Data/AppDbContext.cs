@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using myTube.Domain.Entities;
+using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,7 +31,9 @@ namespace myTube.Data
         {
             base.OnConfiguring(optionsBuilder);
 
-            optionsBuilder.UseMySql(_config["CONNECTION_STRING"], b => b.MigrationsAssembly("myTube.Data"));
+            optionsBuilder.UseMySql(_config["CONNECTION_STRING"], ServerVersion.Create(new Version(), ServerType.MariaDb));
+
+//            optionsBuilder.UseMySql(_config["CONNECTION_STRING"], b => b.MigrationsAssembly("myTube.Data"));
             //optionsBuilder.UseMySql(_config.GetConnectionString("MySQL"), b => b.MigrationsAssembly("myTube.Data"));
             //optionsBuilder.UseSqlServer(_config.GetConnectionString("SQLServer"), b => b.MigrationsAssembly("myTube.Data"));
         }

@@ -10,7 +10,7 @@ namespace myTube.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     [Migration("20210310125702_inicial")]
-    partial class inicial
+    partial class Inicial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

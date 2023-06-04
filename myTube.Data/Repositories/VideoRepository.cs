@@ -42,10 +42,10 @@ namespace myTube.Data.Repositories
                 .Where(v => string.IsNullOrWhiteSpace(categoria) || v.Canal.Categoria == categoria)
                 .Where(v => 
                     (watch == "" || watch.Length == 4) && v.Status == EStatusVideo.NaoAssistido ||
-                    watch.Contains("L") && v.Status == EStatusVideo.AssistirDepois||
-                    watch.Contains("A") && v.Status == EStatusVideo.Assistido ||
-                    watch.Contains("I") && v.Status == EStatusVideo.Ignorado||
-                    watch.Contains("F") && v.Status == EStatusVideo.Favorito
+                    watch.Contains('L') && v.Status == EStatusVideo.AssistirDepois||
+                    watch.Contains('A') && v.Status == EStatusVideo.Assistido ||
+                    watch.Contains('I') && v.Status == EStatusVideo.Ignorado||
+                    watch.Contains('F') && v.Status == EStatusVideo.Favorito
                     )
                 .ToList();
         }
