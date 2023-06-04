@@ -88,5 +88,21 @@ namespace myTube.Data.Repositories
             _ctx.Entry(canal).Property(x => x.Status).IsModified = true;
             await _ctx.SaveChangesAsync();
         }
+
+        public async Task SetChannelDefaultSpeed(Guid id, string speed)
+        {
+            var canal = await GetById(id);
+            if (canal is not null)
+            {
+                canal.DefaultSpeed = speed;
+
+                await _ctx.SaveChangesAsync();
+            }
+        }
+
+        public async Task<Canal> GetById(Guid id)
+        {
+            return await _ctx.Canais.Where(x => id == x.Id).FirstOrDefaultAsync();
+        }
     }
 }

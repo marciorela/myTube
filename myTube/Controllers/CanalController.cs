@@ -8,6 +8,7 @@ using myTube.Data.Repositories;
 using myTube.Domain.Entities;
 using myTube.Domain.Enums;
 using myTube.Services;
+using NuGet.Protocol.Core.Types;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -142,6 +143,14 @@ namespace myTube.Controllers
             {
                 return View();
             }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> SetChannelDefaultSpeed(Guid id, string speed)
+        {
+            await _canalRepository.SetChannelDefaultSpeed(id, speed);
+
+            return Ok();
         }
     }
 }

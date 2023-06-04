@@ -90,6 +90,19 @@ function saveProgress(id, progress) {
     $.ajax(params)
 }
 
+function saveDefaultSpeed(channelId, speed) {
+    let params = {
+        url: `/canal/setChannelDefaultSpeed?id=${channelId}&speed=${speed}`,
+        async: true,
+        method: 'get',
+        success: () => { },
+        error: (resp) => { },
+        complete: () => { }
+    };
+
+    $.ajax(params)
+}
+
 function badgeMinus() {
     document.querySelector('#naoassistido').innerHTML = document.querySelector('#naoassistido').innerHTML - 1;
 }

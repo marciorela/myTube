@@ -2,6 +2,7 @@
 using myTube.Domain.Enums;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -31,6 +32,10 @@ namespace myTube.Domain.Entities
 
         [StringLength(50)]
         public string Categoria { get; set; }
+
+        [StringLength(5)]
+        [DefaultValue("2")]
+        public string DefaultSpeed { get; set; }
 
         // READ-ONLY - INFORMAÇÕES CONSULTADAS NA API
         [StringLength(50)]
