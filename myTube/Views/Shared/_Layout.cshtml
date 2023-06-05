@@ -42,7 +42,7 @@
                                     var userId = User.Claims.Where(c => c.Type == System.Security.Claims.ClaimTypes.Sid).FirstOrDefault().Value;
 
                                     // USANDO INJEÇÃO DE DEPENDÊNCIA (@inject)
-                                    var badge = (await _videoRepository.GetListIndex(Guid.Parse(userId), null)).Count().ToString();
+                                    var badge = (await _videoRepository.GetListIndex(Guid.Parse(userId), null, 0)).TotalItems.ToString();
                                 }
                                 <a class="nav-link text-white-50" asp-area="" asp-controller="Video" asp-action="Index">Videos <sup><span id="naoassistido" class="badge badge-pill badge-info">@badge</span></sup></a>
                             </li>

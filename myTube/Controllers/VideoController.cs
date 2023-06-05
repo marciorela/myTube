@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using MR.String;
 using myTube.Domain.Entities;
 using myTube.Models.DTO;
+using MR.PagedList;
 
 namespace myTube.Controllers
 {
@@ -36,10 +37,10 @@ namespace myTube.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index(PesquisaDTO pesquisa)
+        public async Task<IActionResult> Index(PesquisaDTO pesquisa, [FromQuery] string page = "1")
         {
-            var videos = await _videoRepository.GetListIndex(_usuarioService.Id, pesquisa.CanalId, pesquisa.Watch, pesquisa.Categoria);
-            foreach (var video in videos)
+            var videos = await _videoRepository.GetListIndex(_usuarioService.Id, pesquisa.CanalId, int.Parse(page), pesquisa.Watch, pesquisa.Categoria);
+            foreach (var video in videos.Items)
             {
                 if (video.Status == EStatusVideo.NaoAssistido)
                 {

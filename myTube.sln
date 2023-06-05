@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31005.135
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33712.159
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "myTube", "myTube\myTube.csproj", "{4660E1E3-EAD8-432C-A279-B672DC7DDAC2}"
 EndProject
@@ -12,6 +12,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "myTube.WS", "myTube.WS\myTube.WS.csproj", "{812BE111-B044-4BD4-892D-1BD055DCD94A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "myTube.Services", "myTube.Services\myTube.Services.csproj", "{B2EB2E66-2895-4FA2-A881-6B8F45A22732}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MR.PagedList", "..\lib\MR.Utils\MR.PagedList\MR.PagedList.csproj", "{E208039A-0DF3-4B88-A8E5-F10609ED8824}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{B2EB2E66-2895-4FA2-A881-6B8F45A22732}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B2EB2E66-2895-4FA2-A881-6B8F45A22732}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B2EB2E66-2895-4FA2-A881-6B8F45A22732}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E208039A-0DF3-4B88-A8E5-F10609ED8824}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E208039A-0DF3-4B88-A8E5-F10609ED8824}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E208039A-0DF3-4B88-A8E5-F10609ED8824}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E208039A-0DF3-4B88-A8E5-F10609ED8824}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

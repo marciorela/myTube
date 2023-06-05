@@ -5,9 +5,7 @@
     filterWatch = urlParams.get('Watch') || "";
     filterCanalId = urlParams.get('CanalId') || "";
     filterCategoria = urlParams.get('Categoria') || "";
-
-    console.log(filterWatch);
-    console.log(filterCanalId);
+    pageNumber = urlParams.get('Page') || "1";
 });
 
 function setAssistido(id, nome) {
@@ -157,6 +155,11 @@ function setCanalId(canalId) {
     Pesquisar();
 }
 
+function setPage(newPage) {
+    pageNumber = newPage
+    Pesquisar();
+}
+
 function AddFilter(url, filter) {
     let retorno = ""
 
@@ -183,6 +186,8 @@ function Pesquisar() {
     if (filterCategoria != "") {
         url = AddFilter(url, "Categoria=" + filterCategoria);
     }
+
+    url = AddFilter(url, "Page=" + pageNumber)
 
     window.location.replace("/Video" + url);
 }

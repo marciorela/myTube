@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\lib\MR.Utils\MR.PagedList\MR.PagedList.csproj" />
     <ProjectReference Include="..\myTube.Domain\myTube.Domain.csproj" />
   </ItemGroup>
 

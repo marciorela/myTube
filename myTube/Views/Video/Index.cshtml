@@ -1,4 +1,6 @@
-﻿@model IEnumerable<myTube.Domain.Entities.Filme>
+﻿@using MR.PagedList;
+@using myTube.Domain.Entities;
+@model PagedList<Filme>
 
 <link href="~/css/video.css" rel="stylesheet" />
 
@@ -34,7 +36,7 @@
 	</div>
 </div>
 
-@foreach (var item in Model)
+@foreach (var item in Model.Items)
 {
 	//var linkTo = "https://www.youtube.com/watch?v=" + item.YoutubeFilmeId;
 	var duration = new TimeSpan(0, 0, (int)item.DurationSecs);
@@ -105,6 +107,12 @@
 		</div>
 	</div>
 }
+
+<div class="text-center">
+	<button onclick="setPage(@Model.PageNumber-1)"><<<</button>
+	<label>@Model.PageNumber/@Model.TotalPages</label>
+	<button onclick="setPage(@Model.PageNumber+1)">>>></button>
+</div>
 
 @section Scripts {
 	<script src="~/js/video.js"></script>
