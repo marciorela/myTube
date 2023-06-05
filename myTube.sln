@@ -13,8 +13,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "myTube.WS", "myTube.WS\myTu
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "myTube.Services", "myTube.Services\myTube.Services.csproj", "{B2EB2E66-2895-4FA2-A881-6B8F45A22732}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MR.PagedList", "..\lib\MR.Utils\MR.PagedList\MR.PagedList.csproj", "{E208039A-0DF3-4B88-A8E5-F10609ED8824}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,10 +39,6 @@ Global
 		{B2EB2E66-2895-4FA2-A881-6B8F45A22732}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B2EB2E66-2895-4FA2-A881-6B8F45A22732}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B2EB2E66-2895-4FA2-A881-6B8F45A22732}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E208039A-0DF3-4B88-A8E5-F10609ED8824}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E208039A-0DF3-4B88-A8E5-F10609ED8824}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E208039A-0DF3-4B88-A8E5-F10609ED8824}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E208039A-0DF3-4B88-A8E5-F10609ED8824}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

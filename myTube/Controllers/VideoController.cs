@@ -11,7 +11,6 @@ using System.Threading.Tasks;
 using MR.String;
 using myTube.Domain.Entities;
 using myTube.Models.DTO;
-using MR.PagedList;
 
 namespace myTube.Controllers
 {
