@@ -114,6 +114,8 @@ function setConsole(id, nome) {
 }
 
 function ToggleWatch(watch) {
+    pageNumber = 1;
+
     if (filterWatch.indexOf(watch) == -1) {
         filterWatch += watch;
     } else {
@@ -142,11 +144,15 @@ function setFilterIgnorado() {
 }
 
 function setFilterCategoria() {
+    pageNumber = 1;
+
     filterCategoria = $('#categorias').val();
     Pesquisar();
 }
 
 function setCanalId(canalId) {
+    pageNumber = 1;
+
     if (canalId == filterCanalId) {
         filterCanalId = "";
     } else {
